@@ -1,1 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light only;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>HighSpot — Claim the board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light only;
+    --bg:#ffffff;
+    --ink:#111111;
+    --muted:#9a958c;
+    --muted2:#b5b0a6;
+    --line:#e8e4dc;
+    --orange:#ff5a36;
+    --orange-tint:#fff1ed;
+    --green:#4cae6b;
+    --navy:#101d3c;
+  }
+  *{box-sizing:border-box;}
+  html{color-scheme:light only;background:#ffffff;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#ffffff !important;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  /* belt-and-suspenders against forced/auto dark-mode rendering */
+  @media (prefers-color-scheme: dark){
+    html, body{ background:#ffffff !important; color:#111111 !important; }
+  }
+  ::selection{background:var(--orange);color:#fff;}
+  .wrap{max-width:560px;margin:0 auto;padding:0 22px;}
 
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:28px 0 6px;
+  }
+  .logo{
+    font-size:25px;font-weight:800;letter-spacing:-0.01em;
+    display:flex;align-items:center;gap:1px;
+    color:var(--navy);
+  }
+  .t-mark{display:flex;align-items:center;margin-left:-2px;}
+  .t-mark svg{display:block;margin-top:-9px;}
+  .live-badge{text-align:right;}
+  .live-row{
+    display:flex;align-items:center;justify-content:flex-end;gap:6px;
+    font-size:12.5px;font-weight:600;color:var(--ink);
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);position:relative;}
+  .dot::after{
+    content:"";position:absolute;inset:-4px;border-radius:50%;
+    border:1.5px solid var(--green);opacity:.5;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%{transform:scale(.6);opacity:.7;}70%{transform:scale(1.6);opacity:0;}100%{opacity:0;}}
+  .total-clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
+
+  .hero h1{
+    font-size:34px;font-weight:800;letter-spacing:-0.02em;
+    line-height:1.12;margin:18px 0 8px;
+  }
+  .hero h1 .price{color:var(--orange);}
+  .hero p{
+    color:#7d7768;font-size:14.5px;line-height:1.5;
+    margin:0 0 22px;max-width:44ch;
+  }
+
+  /* top card */
+  .top-card{
+    border:1.5px solid var(--orange);
+    border-radius:14px;
+    padding:18px 18px 16px;
+    margin-bottom:22px;
+    background:#fff;
+    box-shadow:0 8px 24px -14px rgba(255,90,54,0.35);
+  }
+  .crown-row{
+    display:flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:700;letter-spacing:0.06em;
+    color:var(--orange);text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .top-card .row{display:flex;align-items:center;gap:14px;}
+  .rank-num{font-size:26px;font-weight:800;width:38px;flex-shrink:0;color:var(--ink);}
+  .avatar{
+    width:36px;height:36px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:14px;color:#fff;
+    flex-shrink:0;
+  }
+  .entry-body{flex:1;min-width:0;}
+  .handle-line{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15.5px;}
+  .platform-ic{font-size:12.5px;opacity:0.75;}
+  .tagline{color:#9a958c;font-size:13px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .bid-figs{text-align:right;flex-shrink:0;}
+  .bid-amt{font-size:16.5px;font-weight:800;color:var(--orange);}
+  .clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
+
+  /* form */
+  .panel{
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:30px;
+  }
+  .platform-tabs{display:flex;gap:8px;margin-bottom:14px;}
+  .p-tab{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    padding:11px 8px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:#fff;
+    color:#59544a;
+    font-size:13.5px;font-weight:600;
+    cursor:pointer;
+    transition:border-color .15s,color .15s,background .15s;
+  }
+  .p-tab.active{border-color:var(--orange);color:var(--orange);background:var(--orange-tint);}
+  .field{margin-bottom:11px;}
+  .field input{
+    width:100%;
+    background:#fff;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:12px 13px;
+    color:var(--ink);
+    font-size:14.5px;
+    font-family:'Inter',sans-serif;
+    outline:none;
+  }
+  .field input::placeholder{color:#c3beb2;}
+  .field input:focus{border-color:var(--orange);}
+  .charcount{font-size:10.5px;color:var(--muted2);text-align:right;margin-top:4px;font-family:'Space Mono',monospace;}
+
+  /* bid stepper */
+  .stepper-label{
+    font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;
+    margin-bottom:7px;font-family:'Space Mono',monospace;
+  }
+  .stepper-field{
+    display:flex;align-items:center;justify-content:space-between;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    padding:8px 10px;
+    margin-bottom:11px;
+  }
+  .step-btn{
+    width:40px;height:40px;flex-shrink:0;
+    border-radius:10px;
+    border:none;
+    font-size:19px;font-weight:800;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    user-select:none;
+    transition:filter .1s, transform .08s;
+  }
+  .step-btn:active{transform:scale(0.94);}
+  .step-btn.minus{background:#f3f0e9;color:#59544a;}
+  .step-btn.minus:disabled{opacity:0.4;cursor:not-allowed;}
+  .step-btn.plus{background:var(--orange);color:#fff;box-shadow:0 6px 16px -8px rgba(255,90,54,0.65);}
+  .stepper-amount{
+    font-size:23px;font-weight:800;color:var(--ink);
+    display:flex;align-items:baseline;gap:1px;
+  }
+  .stepper-amount .cur{color:var(--orange);font-size:16px;}
+  .stepper-hint{font-size:10.5px;color:var(--muted2);text-align:center;margin:-4px 0 11px;font-family:'Space Mono',monospace;}
+
+  .submit-btn{
+    width:100%;
+    margin-top:4px;
+    padding:15px;
+    border:none;border-radius:11px;
+    background:var(--orange);
+    color:#fff;
+    font-size:15px;font-weight:700;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    box-shadow:0 10px 24px -10px rgba(255,90,54,0.55);
+    transition:filter .15s, transform .1s;
+  }
+  .submit-btn:hover{filter:brightness(1.05);}
+  .submit-btn:active{transform:scale(0.99);}
+  .submit-btn:disabled{background:#e8e4dc;color:#b5b0a6;box-shadow:none;cursor:not-allowed;}
+  .err{color:var(--orange);font-size:12.5px;margin-top:9px;text-align:center;min-height:0;font-weight:600;}
+  .hint{font-size:12px;color:var(--muted2);margin-top:10px;text-align:center;}
+
+  /* board */
+  .board-list{display:flex;flex-direction:column;}
+  .b-row{
+    display:flex;align-items:center;gap:13px;
+    padding:15px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .b-row:last-child{border-bottom:none;}
+  .b-rank{font-size:13px;font-weight:700;color:var(--muted2);width:20px;flex-shrink:0;font-family:'Space Mono',monospace;}
+  .b-avatar{
+    width:30px;height:30px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:12px;color:#fff;flex-shrink:0;
+  }
+  .b-body{flex:1;min-width:0;}
+  .b-handle{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
+  .b-tagline{color:#9a958c;font-size:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .b-figs{text-align:right;flex-shrink:0;}
+  .b-amt{font-size:14.5px;font-weight:800;color:var(--ink);}
+  .b-clicks{font-size:10.5px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;}
+
+  .empty{text-align:center;color:var(--muted2);font-size:13px;padding:20px 0;}
+  .loading{text-align:center;color:var(--muted2);font-size:13px;padding:30px 0;font-family:'Space Mono',monospace;}
+  .footnote{text-align:center;font-size:11px;color:var(--muted2);margin-top:20px;font-family:'Space Mono',monospace;}
+
+  /* returning-bidder banner */
+  .comeback{
+    display:flex;align-items:center;gap:11px;
+    background:#101d3c;color:#fff;
+    border-radius:12px;padding:12px 14px;
+    margin-bottom:18px;
+  }
+  .comeback-ic{font-size:18px;flex-shrink:0;}
+  .comeback-text{flex:1;font-size:12.5px;line-height:1.4;}
+  .comeback-text b{color:#ffb199;}
+  .comeback-btn{
+    flex-shrink:0;background:var(--orange);color:#fff;border:none;
+    border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;
+  }
+  .comeback-close{
+    flex-shrink:0;background:transparent;border:none;color:#8b93a8;
+    font-size:14px;cursor:pointer;padding:2px 4px;
+  }
+
+  /* scroll-down toast */
+  .scroll-toast{
+    position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
+    background:var(--ink);color:#fff;
+    font-size:12.5px;font-weight:600;
+    padding:11px 18px;border-radius:999px;
+    box-shadow:0 12px 28px -10px rgba(0,0,0,0.4);
+    opacity:0;pointer-events:none;
+    transition:opacity .35s, transform .35s;
+    z-index:40;cursor:pointer;
+    display:flex;align-items:center;gap:6px;
+  }
+  .scroll-toast.show{opacity:1;pointer-events:auto;transform:translate(-50%,0);animation:bob 1.6s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,-5px);}}
+  @media (prefers-reduced-motion: reduce){.scroll-toast.show{animation:none;}}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="logo">
+      <span>HighSpo</span>
+      <span class="t-mark">
+        <svg width="20" height="38" viewBox="0 0 24 46" fill="none">
+          <path d="M12 46 V14" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <path d="M3 18 H19" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <path d="M12 0 L20 12 H4 Z" fill="currentColor"/>
+        </svg>
+      </span>
+    </div>
+    <div class="live-badge">
+      <div class="live-row"><span class="dot"></span><span id="watchingCount">— watching</span></div>
+      <div class="total-clicks" id="totalClicks">— total clicks</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>Claim #1 for <span class="price" id="topPriceDisplay">$—</span></h1>
+    <p>Outbid them to take the top spot. Any bid still lands you a seat on the board.</p>
+  </div>
+
+  <div id="comebackBanner"></div>
+
+  <div id="topCardHolder"></div>
+
+  <div class="panel">
+    <div class="platform-tabs" id="platformTabs">
+      <div class="p-tab active" data-platform="tiktok">♪ TikTok</div>
+      <div class="p-tab" data-platform="instagram">◎ Instagram</div>
+      <div class="p-tab" data-platform="link">🔗 Link</div>
+    </div>
+
+    <div class="field">
+      <input id="handleInput" type="text" placeholder="@yourhandle" maxlength="30">
+    </div>
+
+    <div class="field">
+      <input id="taglineInput" type="text" placeholder="One line to convince people to click" maxlength="42">
+      <div class="charcount"><span id="taglineCount">0</span>/42</div>
+    </div>
+
+    <div class="stepper-label">Your bid</div>
+    <div class="stepper-field">
+      <button class="step-btn minus" id="decBid" type="button">–</button>
+      <div class="stepper-amount"><span class="cur">$</span><span id="bidAmountDisplay">1</span></div>
+      <button class="step-btn plus" id="incBid" type="button">+</button>
+    </div>
+    <div class="stepper-hint">tap + to raise your bid, $1 at a time</div>
+
+    <button class="submit-btn" id="submitBtn">🔥 Place your bid</button>
+    <div class="err" id="errMsg"></div>
+    <div class="hint" id="hintMsg">Come in under the top bid and you still land a spot on the board.</div>
+  </div>
+
+  <div id="boardSection">
+    <div class="board-list" id="boardList">
+      <div class="loading">loading board…</div>
+    </div>
+  </div>
+
+  <div class="footnote">bids are stored live and visible to anyone who opens this board</div>
+</div>
+
+<div class="scroll-toast" id="scrollToast">
+  <span id="scrollToastText">↓ more spots below</span>
+</div>
+
+
+
+<script>
+const MIN_NEW_BID = 5;
+const MIN_BID = 1;
+const platformIcons = { tiktok: '♪', instagram: '◎', link: '🔗' };
+const AVATAR_COLORS = ['#2f6fed','#7a3ff0','#0fa36b','#e0663b','#c23b6f','#d4a017','#3ba3c9'];
+
+let entries = [];
+let selectedPlatform = 'tiktok';
+let watchingBase = 280 + Math.floor(Math.random()*60);
+let bidAmount = MIN_BID;
+let pendingEntry = null;
+const MY_BIDS_KEY = 'topspo-my-bids';
+
+function colorFor(handle){
+  let h = 0;
+  for(let i=0;i<handle.length;i++) h = (h*31 + handle.charCodeAt(i)) % AVATAR_COLORS.length;
+  return AVATAR_COLORS[Math.abs(h)];
+}
+function initials(handle){
+  const clean = handle.replace(/^@/,'').replace(/^https?:\/\//,'').replace(/^www\./,'');
+  return (clean.slice(0,1) || '?').toUpperCase();
+}
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderTopCard(){
+  const holder = document.getElementById('topCardHolder');
+  const priceDisplay = document.getElementById('topPriceDisplay');
+  if(entries.length === 0){
+    priceDisplay.textContent = '$5';
+    holder.innerHTML = '';
+    return;
+  }
+  const top = entries[0];
+  priceDisplay.textContent = '$' + top.bid;
+  holder.innerHTML = `
+    <div class="top-card">
+      <div class="crown-row">🔥 currently #1</div>
+      <div class="row">
+        <div class="rank-num">#1</div>
+        <div class="avatar" style="background:${colorFor(top.handle)}">${initials(top.handle)}</div>
+        <div class="entry-body">
+          <div class="handle-line"><span class="platform-ic">${platformIcons[top.platform]||''}</span>${escapeHtml(top.handle)}</div>
+          <div class="tagline">${escapeHtml(top.tagline || '')}</div>
+        </div>
+        <div class="bid-figs">
+          <div class="bid-amt">$${top.bid} bid</div>
+          <div class="clicks">${top.clicks.toLocaleString()} clicks</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderBoard(){
+  const list = document.getElementById('boardList');
+  const rest = entries.slice(1);
+  if(rest.length === 0){
+    list.innerHTML = '<div class="empty">no other spots yet — be the first to grab #2</div>';
+    return;
+  }
+  list.innerHTML = rest.map((e, i) => `
+    <div class="b-row">
+      <div class="b-rank">${String(i+2).padStart(2,'0')}</div>
+      <div class="b-avatar" style="background:${colorFor(e.handle)}">${initials(e.handle)}</div>
+      <div class="b-body">
+        <div class="b-handle"><span>${platformIcons[e.platform]||''}</span>${escapeHtml(e.handle)}</div>
+        <div class="b-tagline">${escapeHtml(e.tagline || '')}</div>
+      </div>
+      <div class="b-figs">
+        <div class="b-amt">$${e.bid}</div>
+        <div class="b-clicks">${e.clicks.toLocaleString()} clicks</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAll(){
+  renderTopCard();
+  renderBoard();
+  const totalClicks = entries.reduce((a,e)=>a+(e.clicks||0),0);
+  document.getElementById('watchingCount').textContent =
+    (watchingBase + (totalClicks % 40)) + ' watching';
+  document.getElementById('totalClicks').textContent =
+    (totalClicks >= 1000 ? (totalClicks/1000).toFixed(1)+'k' : totalClicks) + ' total clicks';
+}
+
+async function loadEntries(){
+  try{
+    const res = await fetch('/api/get-board');
+    entries = res.ok ? await res.json() : [];
+  }catch(e){ entries = []; }
+  entries.sort((a,b)=> b.bid - a.bid || a.ts - b.ts);
+  bidAmount = entries.length === 0 ? MIN_NEW_BID : MIN_BID;
+  document.getElementById('bidAmountDisplay').textContent = bidAmount;
+  renderAll();
+  checkComeback();
+  scheduleScrollToast();
+  handleReturnFromCheckout();
+}
+
+/* ---- personal bid history (private to this browser, localStorage) ---- */
+function rememberMyBid(handle, bid, platform){
+  let mine = [];
+  try{ mine = JSON.parse(localStorage.getItem(MY_BIDS_KEY) || '[]'); }catch(e){ mine = []; }
+  const idx = mine.findIndex(m => m.handle.toLowerCase() === handle.toLowerCase());
+  const record = { handle, bid, platform, ts: Date.now() };
+  if(idx >= 0) mine[idx] = record; else mine.push(record);
+  localStorage.setItem(MY_BIDS_KEY, JSON.stringify(mine));
+}
+
+function checkComeback(){
+  let mine = [];
+  try{ mine = JSON.parse(localStorage.getItem(MY_BIDS_KEY) || '[]'); }catch(e){ mine = []; }
+  if(!mine.length || !entries.length) return;
+
+  mine.sort((a,b)=> b.ts - a.ts);
+  const last = mine[0];
+  const topBid = entries[0].bid;
+  const stillTop = entries[0].handle.toLowerCase() === last.handle.toLowerCase();
+  if(stillTop) return; // they're already #1, nothing to prompt
+
+  const banner = document.getElementById('comebackBanner');
+  banner.innerHTML = `
+    <div class="comeback">
+      <div class="comeback-ic">👋</div>
+      <div class="comeback-text">Welcome back — you bid <b>$${last.bid}</b> on ${escapeHtml(last.handle)}. #1 is now $${topBid}. Bid again to get back on top.</div>
+      <button class="comeback-btn" id="comebackBtn">Bid again</button>
+      <button class="comeback-close" id="comebackClose">✕</button>
+    </div>
+  `;
+  document.getElementById('comebackBtn').addEventListener('click', ()=>{
+    document.getElementById('handleInput').value = last.handle;
+    document.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('active'));
+    const tab = document.querySelector(`.p-tab[data-platform="${last.platform}"]`);
+    if(tab) tab.classList.add('active');
+    selectedPlatform = last.platform;
+    bidAmount = Math.max(topBid + 1, minAllowed());
+    document.getElementById('bidAmountDisplay').textContent = bidAmount;
+    document.querySelector('.panel').scrollIntoView({behavior:'smooth', block:'center'});
+  });
+  document.getElementById('comebackClose').addEventListener('click', ()=>{ banner.innerHTML = ''; });
+}
+
+/* ---- handle the redirect back from Stripe Checkout ---- */
+function handleReturnFromCheckout(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('paid') === '1'){
+    let pending = null;
+    try{ pending = JSON.parse(sessionStorage.getItem('pendingBid') || 'null'); }catch(e){}
+    if(pending){
+      rememberMyBid(pending.handleRaw, pending.bid, pending.platform);
+      sessionStorage.removeItem('pendingBid');
+    }
+    const toast = document.getElementById('scrollToast');
+    toast.querySelector('span, #scrollToastText')?.replaceChildren(
+      document.createTextNode('🎉 Payment received — you\u2019re on the board')
+    );
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 3200);
+  }
+  if(params.has('paid') || params.has('canceled')){
+    history.replaceState({}, '', window.location.pathname);
+  }
+}
+
+/* ---- scroll-down nudge ---- */
+function scheduleScrollToast(){
+  const toast = document.getElementById('scrollToast');
+  setTimeout(()=>{
+    if(window.scrollY < 40) toast.classList.add('show');
+  }, 1400);
+
+  const hide = ()=> toast.classList.remove('show');
+  window.addEventListener('scroll', ()=>{ if(window.scrollY > 60) hide(); }, {passive:true});
+  toast.addEventListener('click', ()=>{
+    document.getElementById('boardSection').scrollIntoView({behavior:'smooth', block:'start'});
+    hide();
+  });
+}
+
+
+document.getElementById('platformTabs').addEventListener('click', (e)=>{
+  const tab = e.target.closest('.p-tab');
+  if(!tab) return;
+  document.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  selectedPlatform = tab.dataset.platform;
+  const handleInput = document.getElementById('handleInput');
+  handleInput.placeholder = selectedPlatform === 'link' ? 'yoursite.co' : '@yourhandle';
+});
+
+document.getElementById('taglineInput').addEventListener('input', (e)=>{
+  document.getElementById('taglineCount').textContent = e.target.value.length;
+});
+
+const minAllowed = () => entries.length === 0 ? MIN_NEW_BID : MIN_BID;
+
+document.getElementById('incBid').addEventListener('click', ()=>{
+  bidAmount += 1;
+  document.getElementById('bidAmountDisplay').textContent = bidAmount;
+  document.getElementById('decBid').disabled = bidAmount <= minAllowed();
+});
+document.getElementById('decBid').addEventListener('click', ()=>{
+  if(bidAmount > minAllowed()) bidAmount -= 1;
+  document.getElementById('bidAmountDisplay').textContent = bidAmount;
+  document.getElementById('decBid').disabled = bidAmount <= minAllowed();
+});
+
+document.getElementById('submitBtn').addEventListener('click', async ()=>{
+  const errEl = document.getElementById('errMsg');
+  const btn = document.getElementById('submitBtn');
+  errEl.textContent = '';
+
+  const handleRaw = document.getElementById('handleInput').value.trim();
+  const tagline = document.getElementById('taglineInput').value.trim();
+  const bid = bidAmount;
+
+  if(!handleRaw){
+    errEl.textContent = 'Enter your handle or link first.';
+    return;
+  }
+  if(bid < minAllowed()){
+    errEl.textContent = `New spots start at $${MIN_NEW_BID}.`;
+    return;
+  }
+
+  const handle = selectedPlatform === 'link' || handleRaw.startsWith('@') || handleRaw.includes('.')
+    ? handleRaw
+    : '@' + handleRaw;
+
+  pendingEntry = { handleRaw: handle, tagline, bid, platform: selectedPlatform };
+  // remembered locally now, confirmed for real once Stripe redirects back with ?paid=1
+  sessionStorage.setItem('pendingBid', JSON.stringify(pendingEntry));
+
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to checkout…';
+
+  try{
+    const res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ handle, platform: selectedPlatform, tagline, bid })
+    });
+    const data = await res.json();
+    if(!res.ok || !data.url) throw new Error(data.error || 'Checkout failed');
+    window.location.href = data.url; // → Stripe-hosted Checkout page
+  }catch(e){
+    errEl.textContent = 'Could not start checkout — try again.';
+    btn.disabled = false;
+    btn.innerHTML = '🔥 Place your bid';
+  }
+});
+
+loadEntries();
+</script>
+
+</body>
+</html>
