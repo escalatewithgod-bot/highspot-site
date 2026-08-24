@@ -112,10 +112,46 @@
   .entry-body{flex:1;min-width:0;}
   .handle-line{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15.5px;}
   .platform-ic{font-size:12.5px;opacity:0.75;}
-  .tagline{color:#6e6759;font-size:13px;margin-top:2px;line-height:1.4;}
+  .tagline{color:#3d382e;font-size:14px;font-weight:500;margin-top:3px;line-height:1.45;}
   .bid-figs{text-align:right;flex-shrink:0;}
   .bid-amt{font-size:16.5px;font-weight:800;color:var(--orange);}
   .clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
+
+  .panel-inner{ padding-top:2px; }
+
+  /* "add your listing" trigger button, replacing the always-visible form */
+  .add-listing-btn{
+    width:100%;
+    padding:13px;
+    border:1.5px dashed var(--orange);
+    border-radius:12px;
+    background:var(--orange-tint);
+    color:var(--orange);
+    font-weight:700;font-size:14px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;margin-bottom:24px;
+  }
+  .board-head-label{
+    font-size:11.5px;color:var(--muted2);font-weight:700;text-transform:uppercase;
+    letter-spacing:.05em;margin-bottom:8px;font-family:'Space Mono',monospace;
+  }
+
+  /* modal sheet housing the form */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(17,17,17,.5);
+    display:flex;align-items:flex-end;justify-content:center;z-index:50;
+    opacity:0;pointer-events:none;transition:opacity .2s;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:auto;}
+  .modal-sheet{
+    background:#fff;width:100%;max-width:480px;border-radius:18px 18px 0 0;
+    padding:20px 16px 24px;transform:translateY(20px);transition:transform .25s;
+    max-height:88vh;overflow-y:auto;
+  }
+  .modal-overlay.open .modal-sheet{transform:translateY(0);}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:0 4px;}
+  .modal-head h2{font-size:16px;margin:0;}
+  .modal-close{width:28px;height:28px;border-radius:50%;border:none;background:#f3f0e9;font-size:14px;cursor:pointer;}
 
   .panel{
     border:1.5px solid var(--line);
@@ -203,6 +239,18 @@
     display:flex;align-items:baseline;gap:1px;
   }
   .stepper-amount .cur{color:var(--orange);font-size:14px;}
+  .stepper-amount input{
+    font-family:'Inter',sans-serif;
+    font-size:20px;font-weight:800;color:var(--ink);
+    border:none;background:transparent;outline:none;
+    width:4.5ch;padding:0;text-align:left;
+    -moz-appearance:textfield;
+  }
+  .stepper-amount input::-webkit-outer-spin-button,
+  .stepper-amount input::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;
+  }
+  .stepper-amount input:focus{color:var(--orange);}
   .stepper-hint{font-size:10px;color:var(--muted2);text-align:center;margin:-2px 0 8px;font-family:'Space Mono',monospace;}
 
   .submit-btn{
@@ -226,23 +274,32 @@
 
   .board-list{display:flex;flex-direction:column;}
   .b-row{
-    display:flex;align-items:center;gap:13px;
-    padding:15px 0;
+    display:flex;align-items:center;gap:11px;
+    padding:12px 0;
     border-bottom:1px solid var(--line);
+    cursor:pointer;
   }
   .b-row:last-child{border-bottom:none;}
-  .b-rank{font-size:13px;font-weight:700;color:var(--muted2);width:20px;flex-shrink:0;font-family:'Space Mono',monospace;}
+  .b-rank{font-size:12px;font-weight:700;color:var(--muted2);width:18px;flex-shrink:0;font-family:'Space Mono',monospace;}
   .b-avatar{
-    width:30px;height:30px;border-radius:8px;
+    width:32px;height:32px;border-radius:8px;
     display:flex;align-items:center;justify-content:center;
     font-weight:800;font-size:12px;color:#fff;flex-shrink:0;
   }
   .b-body{flex:1;min-width:0;}
   .b-handle{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
-  .b-tagline{color:#6e6759;font-size:12px;margin-top:1px;line-height:1.35;}
-  .b-figs{text-align:right;flex-shrink:0;}
-  .b-amt{font-size:14.5px;font-weight:800;color:var(--ink);}
-  .b-clicks{font-size:10.5px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;}
+  .b-tagline{color:#3d382e;font-size:12.5px;font-weight:500;margin-top:4px;line-height:1.45;display:none;}
+  .b-row.expanded .b-tagline{display:block;}
+  .b-figs{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .b-amt{font-size:14px;font-weight:800;color:var(--ink);}
+  .b-clicks{font-size:10.5px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;display:none;}
+  .b-row.expanded .b-clicks{display:block;}
+  .expand-btn{
+    width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted2);
+    flex-shrink:0;cursor:pointer;transition:transform .15s;
+  }
+  .b-row.expanded .expand-btn{transform:rotate(180deg);}
 
   .empty{text-align:center;color:var(--muted2);font-size:13px;padding:20px 0;}
   .loading{text-align:center;color:var(--muted2);font-size:13px;padding:30px 0;font-family:'Space Mono',monospace;}
@@ -310,53 +367,65 @@
 
   <div id="topCardHolder"></div>
 
-  <div class="panel">
-    <div class="platform-tabs" id="platformTabs">
-      <div class="p-tab active" data-platform="tiktok"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg> TikTok</div>
-      <div class="p-tab" data-platform="instagram"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg> Instagram</div>
-      <div class="p-tab" data-platform="link"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="7"/><ellipse cx="8" cy="8" rx="3" ry="7"/><line x1="1" y1="8" x2="15" y2="8"/></svg> Link</div>
-    </div>
-
-    <div class="field">
-      <input id="handleInput" type="text" placeholder="@yourhandle" maxlength="30">
-    </div>
-
-    <div class="field">
-      <input id="taglineInput" type="text" placeholder="One line to convince people to click" maxlength="42">
-      <div class="charcount"><span id="taglineCount">0</span>/42</div>
-    </div>
-
-    <div class="field">
-      <div class="avatar-picker" id="avatarPicker">
-        <div class="avatar-preview" id="avatarPreview">📷</div>
-        <div class="avatar-picker-text">
-          <span id="avatarPickerLabel">Add a photo (optional)</span>
-          <span class="avatar-picker-sub">otherwise we'll use your initial</span>
-        </div>
-        <input id="avatarInput" type="file" accept="image/*" style="display:none;">
-      </div>
-    </div>
-
-    <div class="stepper-label">Your bid</div>
-    <div class="stepper-field">
-      <button class="step-btn minus" id="decBid" type="button">–</button>
-      <div class="stepper-amount"><span class="cur">$</span><span id="bidAmountDisplay">1</span></div>
-      <button class="step-btn plus" id="incBid" type="button">+</button>
-    </div>
-    <div class="stepper-hint">tap + to raise your bid, $1 at a time</div>
-
-    <button class="submit-btn" id="submitBtn">🔥 Place your bid</button>
-    <div class="err" id="errMsg"></div>
-    <div class="hint" id="hintMsg">Come in under the top bid and you still land a spot on the board.</div>
-  </div>
+  <button class="add-listing-btn" id="openAddModal" type="button">＋ Add your listing to the board</button>
 
   <div id="boardSection">
+    <div class="board-head-label">the board</div>
     <div class="board-list" id="boardList">
       <div class="loading">loading board…</div>
     </div>
   </div>
 
   <div class="footnote">bids are stored live and visible to anyone who opens this board</div>
+</div>
+
+<div class="modal-overlay" id="addModalOverlay">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <h2>Add your listing</h2>
+      <button class="modal-close" id="closeAddModal" type="button">✕</button>
+    </div>
+
+    <div class="panel-inner">
+      <div class="platform-tabs" id="platformTabs">
+        <div class="p-tab active" data-platform="tiktok"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg> TikTok</div>
+        <div class="p-tab" data-platform="instagram"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg> Instagram</div>
+        <div class="p-tab" data-platform="link"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="7"/><ellipse cx="8" cy="8" rx="3" ry="7"/><line x1="1" y1="8" x2="15" y2="8"/></svg> Link</div>
+      </div>
+
+      <div class="field">
+        <input id="handleInput" type="text" placeholder="@yourhandle" maxlength="30">
+      </div>
+
+      <div class="field">
+        <input id="taglineInput" type="text" placeholder="One line to convince people to click" maxlength="42">
+        <div class="charcount"><span id="taglineCount">0</span>/42</div>
+      </div>
+
+      <div class="field">
+        <div class="avatar-picker" id="avatarPicker">
+          <div class="avatar-preview" id="avatarPreview">📷</div>
+          <div class="avatar-picker-text">
+            <span id="avatarPickerLabel">Add a photo (optional)</span>
+            <span class="avatar-picker-sub">auto-cropped to fit — otherwise we'll use your initial</span>
+          </div>
+          <input id="avatarInput" type="file" accept="image/*" style="display:none;">
+        </div>
+      </div>
+
+      <div class="stepper-label">Your bid</div>
+      <div class="stepper-field">
+        <button class="step-btn minus" id="decBid" type="button">–</button>
+        <div class="stepper-amount"><span class="cur">$</span><span id="bidAmountDisplay">1</span></div>
+        <button class="step-btn plus" id="incBid" type="button">+</button>
+      </div>
+      <div class="stepper-hint">hold + or − to adjust faster</div>
+
+      <button class="submit-btn" id="submitBtn">🔥 Place your bid</button>
+      <div class="err" id="errMsg"></div>
+      <div class="hint" id="hintMsg">Come in under the top bid and you still land a spot on the board.</div>
+    </div>
+  </div>
 </div>
 
 <div class="scroll-toast" id="scrollToast">
@@ -380,14 +449,14 @@ let pendingEntry = null;
 let selectedAvatarDataUrl = null; // compressed image ready to upload, or null
 const MY_BIDS_KEY = 'topspo-my-bids';
 
-/* ---- real live "watching" count via Supabase Realtime Presence ---- */
+/* ---- shared Supabase client, board reads, real "watching" count via Realtime Presence ---- */
 const SUPABASE_URL = 'https://kcxjlgibpfoszzyuqbvc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeGpsZ2licGZvc3p6eXVxYnZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1Mzg4NzgsImV4cCI6MjEwMzExNDg3OH0.2oUe_Qm9skUFXN6mLGAr-5l02nDmhxrwJkIIkiF176A';
+window.sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let liveWatchingCount = 1; // fallback while connecting
 function initPresence(){
   try{
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    window.sbClient = sb; // shared client, also used for click tracking + visit counter
+    const sb = window.sbClient;
     const myKey = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0,12);
     const channel = sb.channel('board-presence', { config: { presence: { key: myKey } } });
     channel.on('presence', { event: 'sync' }, ()=>{
@@ -509,21 +578,29 @@ function renderBoard(){
     return;
   }
   list.innerHTML = rest.map((e, i) => `
-    <div class="b-row" style="cursor:pointer;" data-idx="${i}">
+    <div class="b-row" data-idx="${i}">
       <div class="b-rank">${String(i+2).padStart(2,'0')}</div>
       ${avatarHtml(e, 'b-avatar')}
       <div class="b-body">
         <div class="b-handle"><span>${platformIcons[e.platform]||''}</span>${escapeHtml(e.handle)}</div>
         <div class="b-tagline">${escapeHtml(e.tagline || '')}</div>
+        <div class="b-clicks">${e.clicks.toLocaleString()} clicks</div>
       </div>
       <div class="b-figs">
         <div class="b-amt">$${e.bid}</div>
-        <div class="b-clicks">${e.clicks.toLocaleString()} clicks</div>
+        <div class="expand-btn" data-expand="${i}">⌄</div>
       </div>
     </div>
   `).join('');
   list.querySelectorAll('.b-row').forEach(row=>{
-    row.addEventListener('click', ()=> trackClick(rest[Number(row.dataset.idx)]));
+    row.addEventListener('click', (e)=>{
+      if(e.target.closest('.expand-btn')){
+        e.stopPropagation();
+        row.classList.toggle('expanded');
+        return;
+      }
+      trackClick(rest[Number(row.dataset.idx)]);
+    });
   });
 }
 
@@ -538,8 +615,13 @@ function renderAll(){
 
 async function loadEntries(){
   try{
-    const res = await fetch('/api/get-board');
-    entries = res.ok ? await res.json() : [];
+    const { data, error } = await window.sbClient
+      .from('bids')
+      .select('*')
+      .order('bid', { ascending: false })
+      .order('ts', { ascending: true });
+    if(error) throw error;
+    entries = data || [];
   }catch(e){ entries = []; }
   entries.sort((a,b)=> b.bid - a.bid || a.ts - b.ts);
   bidAmount = entries.length === 0 ? MIN_NEW_BID : MIN_BID;
@@ -587,7 +669,7 @@ function checkComeback(){
     selectedPlatform = last.platform;
     bidAmount = Math.max(topBid + 1, minAllowed());
     document.getElementById('bidAmountDisplay').textContent = bidAmount;
-    document.querySelector('.panel').scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById('addModalOverlay').classList.add('open');
   });
   document.getElementById('comebackClose').addEventListener('click', ()=>{ banner.innerHTML = ''; });
 }
@@ -642,6 +724,17 @@ document.getElementById('taglineInput').addEventListener('input', (e)=>{
   document.getElementById('taglineCount').textContent = e.target.value.length;
 });
 
+/* ---- add-listing modal open/close ---- */
+document.getElementById('openAddModal').addEventListener('click', ()=>{
+  document.getElementById('addModalOverlay').classList.add('open');
+});
+document.getElementById('closeAddModal').addEventListener('click', ()=>{
+  document.getElementById('addModalOverlay').classList.remove('open');
+});
+document.getElementById('addModalOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'addModalOverlay') document.getElementById('addModalOverlay').classList.remove('open');
+});
+
 /* ---- avatar photo picker: resize/compress in the browser before upload ---- */
 document.getElementById('avatarPicker').addEventListener('click', ()=>{
   document.getElementById('avatarInput').click();
@@ -654,14 +747,16 @@ document.getElementById('avatarInput').addEventListener('change', (e)=>{
   reader.onload = (ev)=>{
     const img = new Image();
     img.onload = ()=>{
-      const maxDim = 240;
-      let { width, height } = img;
-      if(width > height && width > maxDim){ height = height * (maxDim/width); width = maxDim; }
-      else if(height > maxDim){ width = width * (maxDim/height); height = maxDim; }
+      // auto rescaler: center-crop to a square first, then downscale —
+      // guarantees it always fits cleanly in the round/square avatar slots
+      const size = Math.min(img.width, img.height);
+      const sx = (img.width - size) / 2;
+      const sy = (img.height - size) / 2;
+      const outSize = 200;
       const canvas = document.createElement('canvas');
-      canvas.width = width; canvas.height = height;
-      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-      selectedAvatarDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      canvas.width = outSize; canvas.height = outSize;
+      canvas.getContext('2d').drawImage(img, sx, sy, size, size, 0, 0, outSize, outSize);
+      selectedAvatarDataUrl = canvas.toDataURL('image/jpeg', 0.85);
       document.getElementById('avatarPreview').innerHTML = `<img src="${selectedAvatarDataUrl}">`;
       document.getElementById('avatarPickerLabel').textContent = 'Photo added — tap to change';
     };
