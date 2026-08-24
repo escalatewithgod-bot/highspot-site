@@ -50,11 +50,24 @@
   header.top{
     display:flex;align-items:center;justify-content:center;
     padding:28px 0 4px;
+    position:relative;
   }
   .logo{
     display:flex;align-items:center;
   }
   .logo img{height:42px;width:auto;display:block;}
+  .header-about-link{
+    position:absolute;
+    top:50%; right:0;
+    transform:translateY(-50%);
+    display:flex;align-items:center;gap:3px;
+    font-size:13.5px;font-weight:700;color:#57503f;
+    text-decoration:none;
+  }
+  .header-about-link .ic{
+    font-size:11px;color:var(--orange);
+    line-height:1;
+  }
 
   .stats-pill-wrap{display:flex;justify-content:center;margin-bottom:18px;}
   .stats-pill{
@@ -428,6 +441,7 @@
     <div class="logo">
       <img src="/logo.png" alt="HighSpot">
     </div>
+    <a class="header-about-link" href="/about.html"><span class="ic">ⓘ</span>about</a>
   </header>
 
   <div class="stats-pill-wrap">
