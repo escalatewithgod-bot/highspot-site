@@ -25,6 +25,15 @@
   *{box-sizing:border-box;}
   html{color-scheme:light only;background:#ffffff;}
   html,body{margin:0;padding:0;touch-action:manipulation;}
+  /* prevent easy text selection / copy on the page, but keep it working inside inputs */
+  body{
+    -webkit-user-select:none;-moz-user-select:none;user-select:none;
+    -webkit-touch-callout:none;
+  }
+  input, textarea{
+    -webkit-user-select:text;-moz-user-select:text;user-select:text;
+    -webkit-touch-callout:default;
+  }
   body{
     background:#ffffff !important;
     color:var(--ink);
@@ -39,26 +48,34 @@
   .wrap{max-width:560px;margin:0 auto;padding:0 22px;}
 
   header.top{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:28px 0 6px;
+    display:flex;align-items:center;justify-content:center;
+    padding:28px 0 4px;
   }
   .logo{
     display:flex;align-items:center;
   }
   .logo img{height:42px;width:auto;display:block;}
-  .live-badge{text-align:right;}
-  .live-row{
-    display:flex;align-items:center;justify-content:flex-end;gap:6px;
-    font-size:12.5px;font-weight:600;color:var(--ink);
+
+  .stats-pill-wrap{display:flex;justify-content:center;margin-bottom:18px;}
+  .stats-pill{
+    display:inline-flex;align-items:center;gap:7px;
+    background:#f5f2ec;border-radius:999px;
+    padding:8px 16px;
+    font-size:12.5px;
+    white-space:nowrap;
+    max-width:100%;
+    overflow:hidden;text-overflow:ellipsis;
   }
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);position:relative;}
+  .stats-online{color:var(--green);font-weight:700;}
+  .stats-sep{color:var(--muted2);}
+  .stats-total{color:#59544a;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);position:relative;flex-shrink:0;}
   .dot::after{
     content:"";position:absolute;inset:-4px;border-radius:50%;
     border:1.5px solid var(--green);opacity:.5;
     animation:pulse 2s infinite;
   }
   @keyframes pulse{0%{transform:scale(.6);opacity:.7;}70%{transform:scale(1.6);opacity:0;}100%{opacity:0;}}
-  .total-clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
 
   .hero h1{
     font-size:34px;font-weight:800;letter-spacing:-0.02em;
@@ -273,11 +290,16 @@
     <div class="logo">
       <img src="/logo.png" alt="HighSpot">
     </div>
-    <div class="live-badge">
-      <div class="live-row"><span class="dot"></span><span id="watchingCount">— watching</span></div>
-      <div class="total-clicks" id="totalClicks">— total clicks</div>
-    </div>
   </header>
+
+  <div class="stats-pill-wrap">
+    <div class="stats-pill">
+      <span class="dot"></span>
+      <span class="stats-online" id="statsOnline">— online</span>
+      <span class="stats-sep">·</span>
+      <span class="stats-total" id="statsTotal">— visitors since launch</span>
+    </div>
+  </div>
 
   <div class="hero">
     <h1>Claim #1 for <span class="price" id="topPriceDisplay">$—</span></h1>
@@ -365,21 +387,41 @@ let liveWatchingCount = 1; // fallback while connecting
 function initPresence(){
   try{
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    window.sbClient = sb; // shared client, also used for click tracking
+    window.sbClient = sb; // shared client, also used for click tracking + visit counter
     const myKey = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0,12);
     const channel = sb.channel('board-presence', { config: { presence: { key: myKey } } });
     channel.on('presence', { event: 'sync' }, ()=>{
       const state = channel.presenceState();
       liveWatchingCount = Object.keys(state).length || 1;
-      document.getElementById('watchingCount').textContent = liveWatchingCount + ' watching';
+      document.getElementById('statsOnline').textContent = liveWatchingCount + ' online';
     });
     channel.subscribe(async (status)=>{
       if(status === 'SUBSCRIBED'){ await channel.track({ online_at: Date.now() }); }
     });
+    initVisitCounter(sb);
   }catch(e){
-    document.getElementById('watchingCount').textContent = '— watching';
+    document.getElementById('statsOnline').textContent = '— online';
   }
 }
+
+/* ---- lifetime visitor counter ---- */
+async function initVisitCounter(sb){
+  const totalEl = document.getElementById('statsTotal');
+  try{
+    // count this as a new visit once per browser tab session, not on every reload
+    const alreadyCounted = sessionStorage.getItem('hs_visit_counted');
+    if(!alreadyCounted){
+      await sb.rpc('increment_visits');
+      sessionStorage.setItem('hs_visit_counted', '1');
+    }
+    const { data, error } = await sb.from('site_stats').select('total_visits').eq('id', 1).single();
+    if(error || !data) throw error || new Error('no data');
+    totalEl.textContent = data.total_visits.toLocaleString() + ' visitors since launch';
+  }catch(e){
+    totalEl.textContent = 'visitors since launch';
+  }
+}
+
 const BLOCKED_TERMS = ['pornhub','xvideos','xnxx','xhamster','youporn','redtube','brazzers','onlyfans','chaturbate','stripchat','spankbang','tube8','camsoda','myfreecams','livejasmin','xxx','porn','nsfw'];
 function isBlocked(text){
   const lower = (text || '').toLowerCase();
@@ -488,10 +530,10 @@ function renderBoard(){
 function renderAll(){
   renderTopCard();
   renderBoard();
-  const totalClicks = entries.reduce((a,e)=>a+(e.clicks||0),0);
-  document.getElementById('watchingCount').textContent = liveWatchingCount + ' watching';
-  document.getElementById('totalClicks').textContent =
-    (totalClicks >= 1000 ? (totalClicks/1000).toFixed(1)+'k' : totalClicks) + ' total clicks';
+  const onlineEl = document.getElementById('statsOnline');
+  if(onlineEl && onlineEl.textContent === '— online'){
+    onlineEl.textContent = liveWatchingCount + ' online';
+  }
 }
 
 async function loadEntries(){
@@ -628,18 +670,55 @@ document.getElementById('avatarInput').addEventListener('change', (e)=>{
   reader.readAsDataURL(file);
 });
 
+function bumpBid(delta){
+  bidAmount = Math.max(minAllowed(), bidAmount + delta);
+  document.getElementById('bidAmountDisplay').textContent = bidAmount;
+  document.getElementById('decBid').disabled = bidAmount <= minAllowed();
+}
+
+// press-and-hold: tap once, or hold to keep incrementing — continuously
+// accelerates the longer you hold, instead of jumping to one fixed speed
+function holdToRepeat(el, fn){
+  let pendingTimer = null;
+  let active = false;
+  let holdStart = null;
+
+  const scheduleNext = ()=>{
+    if(!active) return;
+    const elapsed = Date.now() - holdStart;
+    const maxDelay = 260;  // starting pace, right after the initial pause
+    const minDelay = 35;   // fastest it'll ever go
+    const rampMs = 2200;   // time to reach full speed
+    const t = Math.min(elapsed / rampMs, 1);
+    const delay = maxDelay - (maxDelay - minDelay) * t;
+    pendingTimer = setTimeout(()=>{
+      fn();
+      scheduleNext();
+    }, delay);
+  };
+
+  const start = (e)=>{
+    e.preventDefault();
+    if(active) return;
+    active = true;
+    fn(); // fire once immediately for a normal tap
+    holdStart = Date.now();
+    pendingTimer = setTimeout(scheduleNext, 380); // brief pause before repeating starts
+  };
+  const stop = ()=>{
+    active = false;
+    clearTimeout(pendingTimer);
+  };
+  el.addEventListener('pointerdown', start);
+  el.addEventListener('pointerup', stop);
+  el.addEventListener('pointerleave', stop);
+  el.addEventListener('pointercancel', stop);
+}
+
 const minAllowed = () => entries.length === 0 ? MIN_NEW_BID : MIN_BID;
 
-document.getElementById('incBid').addEventListener('click', ()=>{
-  bidAmount += 1;
-  document.getElementById('bidAmountDisplay').textContent = bidAmount;
-  document.getElementById('decBid').disabled = bidAmount <= minAllowed();
-});
-document.getElementById('decBid').addEventListener('click', ()=>{
-  if(bidAmount > minAllowed()) bidAmount -= 1;
-  document.getElementById('bidAmountDisplay').textContent = bidAmount;
-  document.getElementById('decBid').disabled = bidAmount <= minAllowed();
-});
+holdToRepeat(document.getElementById('incBid'), ()=> bumpBid(1));
+holdToRepeat(document.getElementById('decBid'), ()=> bumpBid(-1));
 
 document.getElementById('submitBtn').addEventListener('click', async ()=>{
   const errEl = document.getElementById('errMsg');
@@ -703,6 +782,12 @@ document.getElementById('submitBtn').addEventListener('click', async ()=>{
     btn.disabled = false;
     btn.innerHTML = '🔥 Place your bid';
   }
+});
+
+// Discourage easy copying: block right-click menu and text-selection drag,
+// while still allowing normal typing/selecting inside form fields.
+document.addEventListener('contextmenu', (e)=>{
+  if(!['INPUT','TEXTAREA'].includes(e.target.tagName)) e.preventDefault();
 });
 
 loadEntries();
