@@ -2,7 +2,7 @@
 <html lang="en" style="color-scheme: light only;">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="color-scheme" content="light only">
 <meta name="supported-color-schemes" content="light">
 <title>HighSpot — Claim the board</title>
@@ -23,7 +23,7 @@
   }
   *{box-sizing:border-box;}
   html{color-scheme:light only;background:#ffffff;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;touch-action:manipulation;}
   body{
     background:#ffffff !important;
     color:var(--ink);
@@ -42,12 +42,9 @@
     padding:28px 0 6px;
   }
   .logo{
-    font-size:25px;font-weight:800;letter-spacing:-0.01em;
-    display:flex;align-items:center;gap:1px;
-    color:var(--navy);
+    display:flex;align-items:center;
   }
-  .t-mark{display:flex;align-items:center;margin-left:-2px;}
-  .t-mark svg{display:block;margin-top:-9px;}
+  .logo img{height:42px;width:auto;display:block;}
   .live-badge{text-align:right;}
   .live-row{
     display:flex;align-items:center;justify-content:flex-end;gap:6px;
@@ -97,7 +94,7 @@
   .entry-body{flex:1;min-width:0;}
   .handle-line{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15.5px;}
   .platform-ic{font-size:12.5px;opacity:0.75;}
-  .tagline{color:#9a958c;font-size:13px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tagline{color:#9a958c;font-size:13px;margin-top:2px;line-height:1.4;}
   .bid-figs{text-align:right;flex-shrink:0;}
   .bid-amt{font-size:16.5px;font-weight:800;color:var(--orange);}
   .clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
@@ -105,55 +102,75 @@
   .panel{
     border:1.5px solid var(--line);
     border-radius:14px;
-    padding:16px;
-    margin-bottom:30px;
+    padding:12px;
+    margin-bottom:22px;
   }
-  .platform-tabs{display:flex;gap:8px;margin-bottom:14px;}
+  .platform-tabs{display:flex;gap:6px;margin-bottom:9px;}
   .p-tab{
     flex:1;
-    display:flex;align-items:center;justify-content:center;gap:6px;
-    padding:11px 8px;
-    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    padding:8px 6px;
+    border-radius:9px;
     border:1.5px solid var(--line);
     background:#fff;
     color:#59544a;
-    font-size:13.5px;font-weight:600;
+    font-size:12.5px;font-weight:600;
     cursor:pointer;
     transition:border-color .15s,color .15s,background .15s;
   }
   .p-tab.active{border-color:var(--orange);color:var(--orange);background:var(--orange-tint);}
-  .field{margin-bottom:11px;}
+  .field{margin-bottom:8px;}
   .field input{
     width:100%;
     background:#fff;
     border:1.5px solid var(--line);
-    border-radius:10px;
-    padding:12px 13px;
+    border-radius:9px;
+    padding:9px 12px;
     color:var(--ink);
-    font-size:14.5px;
+    font-size:14px;
     font-family:'Inter',sans-serif;
     outline:none;
   }
   .field input::placeholder{color:#c3beb2;}
   .field input:focus{border-color:var(--orange);}
-  .charcount{font-size:10.5px;color:var(--muted2);text-align:right;margin-top:4px;font-family:'Space Mono',monospace;}
+  .charcount{font-size:10px;color:var(--muted2);text-align:right;margin-top:2px;font-family:'Space Mono',monospace;}
+
+  .avatar-picker{
+    display:flex;align-items:center;gap:11px;
+    border:1.5px dashed var(--line);
+    border-radius:11px;
+    padding:9px 12px;
+    cursor:pointer;
+    transition:border-color .15s;
+  }
+  .avatar-picker:active{border-color:var(--orange);}
+  .avatar-preview{
+    width:38px;height:38px;border-radius:9px;flex-shrink:0;
+    background:#f3f0e9;color:#9a958c;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;overflow:hidden;
+  }
+  .avatar-preview img{width:100%;height:100%;object-fit:cover;}
+  .avatar-picker-text{display:flex;flex-direction:column;gap:1px;}
+  .avatar-picker-text span:first-child{font-size:13px;font-weight:600;color:var(--ink);}
+  .avatar-picker-sub{font-size:10.5px;color:var(--muted2);}
 
   .stepper-label{
-    font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;
-    margin-bottom:7px;font-family:'Space Mono',monospace;
+    font-size:10.5px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;
+    margin-bottom:5px;font-family:'Space Mono',monospace;
   }
   .stepper-field{
     display:flex;align-items:center;justify-content:space-between;
     border:1.5px solid var(--line);
-    border-radius:12px;
-    padding:8px 10px;
-    margin-bottom:11px;
+    border-radius:11px;
+    padding:6px 8px;
+    margin-bottom:7px;
   }
   .step-btn{
-    width:40px;height:40px;flex-shrink:0;
-    border-radius:10px;
+    width:34px;height:34px;flex-shrink:0;
+    border-radius:9px;
     border:none;
-    font-size:19px;font-weight:800;
+    font-size:17px;font-weight:800;
     cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     user-select:none;
@@ -164,11 +181,11 @@
   .step-btn.minus:disabled{opacity:0.4;cursor:not-allowed;}
   .step-btn.plus{background:var(--orange);color:#fff;box-shadow:0 6px 16px -8px rgba(255,90,54,0.65);}
   .stepper-amount{
-    font-size:23px;font-weight:800;color:var(--ink);
+    font-size:20px;font-weight:800;color:var(--ink);
     display:flex;align-items:baseline;gap:1px;
   }
-  .stepper-amount .cur{color:var(--orange);font-size:16px;}
-  .stepper-hint{font-size:10.5px;color:var(--muted2);text-align:center;margin:-4px 0 11px;font-family:'Space Mono',monospace;}
+  .stepper-amount .cur{color:var(--orange);font-size:14px;}
+  .stepper-hint{font-size:10px;color:var(--muted2);text-align:center;margin:-2px 0 8px;font-family:'Space Mono',monospace;}
 
   .submit-btn{
     width:100%;
@@ -204,7 +221,7 @@
   }
   .b-body{flex:1;min-width:0;}
   .b-handle{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
-  .b-tagline{color:#9a958c;font-size:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .b-tagline{color:#9a958c;font-size:12px;margin-top:1px;line-height:1.35;}
   .b-figs{text-align:right;flex-shrink:0;}
   .b-amt{font-size:14.5px;font-weight:800;color:var(--ink);}
   .b-clicks{font-size:10.5px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;}
@@ -253,7 +270,7 @@
 <div class="wrap">
   <header class="top">
     <div class="logo">
-      <img src="/logo.png" alt="HighSpot" style="height:30px;display:block;">
+      <img src="/logo.png" alt="HighSpot">
     </div>
     <div class="live-badge">
       <div class="live-row"><span class="dot"></span><span id="watchingCount">— watching</span></div>
@@ -284,6 +301,17 @@
     <div class="field">
       <input id="taglineInput" type="text" placeholder="One line to convince people to click" maxlength="42">
       <div class="charcount"><span id="taglineCount">0</span>/42</div>
+    </div>
+
+    <div class="field">
+      <div class="avatar-picker" id="avatarPicker">
+        <div class="avatar-preview" id="avatarPreview">📷</div>
+        <div class="avatar-picker-text">
+          <span id="avatarPickerLabel">Add a photo (optional)</span>
+          <span class="avatar-picker-sub">otherwise we'll use your initial</span>
+        </div>
+        <input id="avatarInput" type="file" accept="image/*" style="display:none;">
+      </div>
     </div>
 
     <div class="stepper-label">Your bid</div>
@@ -327,6 +355,7 @@ let selectedPlatform = 'tiktok';
 let watchingBase = 280 + Math.floor(Math.random()*60);
 let bidAmount = MIN_BID;
 let pendingEntry = null;
+let selectedAvatarDataUrl = null; // compressed image ready to upload, or null
 const MY_BIDS_KEY = 'topspo-my-bids';
 const BLOCKED_TERMS = ['pornhub','xvideos','xnxx','xhamster','youporn','redtube','brazzers','onlyfans','chaturbate','stripchat','spankbang','tube8','camsoda','myfreecams','livejasmin','xxx','porn','nsfw'];
 function isBlocked(text){
@@ -349,6 +378,13 @@ function escapeHtml(s){
   return d.innerHTML;
 }
 
+function avatarHtml(entry, sizeClass){
+  if(entry.avatar_url){
+    return `<div class="${sizeClass}" style="padding:0;overflow:hidden;"><img src="${escapeHtml(entry.avatar_url)}" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`;
+  }
+  return `<div class="${sizeClass}" style="background:${colorFor(entry.handle)}">${initials(entry.handle)}</div>`;
+}
+
 function renderTopCard(){
   const holder = document.getElementById('topCardHolder');
   const priceDisplay = document.getElementById('topPriceDisplay');
@@ -364,7 +400,7 @@ function renderTopCard(){
       <div class="crown-row">🔥 currently #1</div>
       <div class="row">
         <div class="rank-num">#1</div>
-        <div class="avatar" style="background:${colorFor(top.handle)}">${initials(top.handle)}</div>
+        ${avatarHtml(top, 'avatar')}
         <div class="entry-body">
           <div class="handle-line"><span class="platform-ic">${platformIcons[top.platform]||''}</span>${escapeHtml(top.handle)}</div>
           <div class="tagline">${escapeHtml(top.tagline || '')}</div>
@@ -392,7 +428,7 @@ function renderBoard(){
   list.innerHTML = rest.map((e, i) => `
     <div class="b-row">
       <div class="b-rank">${String(i+2).padStart(2,'0')}</div>
-      <div class="b-avatar" style="background:${colorFor(e.handle)}">${initials(e.handle)}</div>
+      ${avatarHtml(e, 'b-avatar')}
       <div class="b-body">
         <div class="b-handle"><span>${platformIcons[e.platform]||''}</span>${escapeHtml(e.handle)}</div>
         <div class="b-tagline">${escapeHtml(e.tagline || '')}</div>
@@ -495,8 +531,8 @@ function handleReturnFromCheckout(){
 function scheduleScrollToast(){
   const toast = document.getElementById('scrollToast');
   setTimeout(()=>{
-    if(window.scrollY < 40) toast.classList.add('show');
-  }, 1400);
+    toast.classList.add('show');
+  }, 900);
 
   const hide = ()=> toast.classList.remove('show');
   window.addEventListener('scroll', ()=>{ if(window.scrollY > 60) hide(); }, {passive:true});
@@ -504,6 +540,7 @@ function scheduleScrollToast(){
     document.getElementById('boardSection').scrollIntoView({behavior:'smooth', block:'start'});
     hide();
   });
+  setTimeout(hide, 6000); // auto-dismiss if they never scroll or tap
 }
 
 document.getElementById('platformTabs').addEventListener('click', (e)=>{
@@ -518,6 +555,34 @@ document.getElementById('platformTabs').addEventListener('click', (e)=>{
 
 document.getElementById('taglineInput').addEventListener('input', (e)=>{
   document.getElementById('taglineCount').textContent = e.target.value.length;
+});
+
+/* ---- avatar photo picker: resize/compress in the browser before upload ---- */
+document.getElementById('avatarPicker').addEventListener('click', ()=>{
+  document.getElementById('avatarInput').click();
+});
+
+document.getElementById('avatarInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const maxDim = 240;
+      let { width, height } = img;
+      if(width > height && width > maxDim){ height = height * (maxDim/width); width = maxDim; }
+      else if(height > maxDim){ width = width * (maxDim/height); height = maxDim; }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      selectedAvatarDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      document.getElementById('avatarPreview').innerHTML = `<img src="${selectedAvatarDataUrl}">`;
+      document.getElementById('avatarPickerLabel').textContent = 'Photo added — tap to change';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
 const minAllowed = () => entries.length === 0 ? MIN_NEW_BID : MIN_BID;
@@ -559,17 +624,33 @@ document.getElementById('submitBtn').addEventListener('click', async ()=>{
     ? handleRaw
     : '@' + handleRaw;
 
-  pendingEntry = { handleRaw: handle, tagline, bid, platform: selectedPlatform };
+  btn.disabled = true;
+  btn.textContent = selectedAvatarDataUrl ? 'Uploading photo…' : 'Redirecting to checkout…';
+
+  let avatarUrl = '';
+  try{
+    if(selectedAvatarDataUrl){
+      const upRes = await fetch('/api/upload-avatar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: selectedAvatarDataUrl })
+      });
+      const upData = await upRes.json();
+      if(upRes.ok && upData.url) avatarUrl = upData.url;
+      // if the upload fails, we just fall through with no photo rather than blocking the bid
+    }
+  }catch(e){ /* non-fatal, continue without avatar */ }
+
+  pendingEntry = { handleRaw: handle, tagline, bid, platform: selectedPlatform, avatarUrl };
   sessionStorage.setItem('pendingBid', JSON.stringify(pendingEntry));
 
-  btn.disabled = true;
   btn.textContent = 'Redirecting to checkout…';
 
   try{
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ handle, platform: selectedPlatform, tagline, bid })
+      body: JSON.stringify({ handle, platform: selectedPlatform, tagline, bid, avatarUrl })
     });
     const data = await res.json();
     if(!res.ok || !data.url) throw new Error(data.error || 'Checkout failed');
