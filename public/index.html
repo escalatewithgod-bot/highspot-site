@@ -403,6 +403,9 @@
 
   <div class="footnote">bids are stored live and visible to anyone who opens this board</div>
   <div class="footnote"><a href="/about.html" style="color:inherit;">about this site & our stats →</a></div>
+  <div class="footnote" style="margin-top:6px;">
+    <a href="/terms.html" style="color:inherit;">terms</a> · <a href="/privacy.html" style="color:inherit;">privacy</a> · <a href="mailto:escalatewithgod@gmail.com" style="color:inherit;">contact</a>
+  </div>
 </div>
 
 <div class="modal-overlay" id="addModalOverlay">
@@ -723,6 +726,11 @@ function handleReturnFromCheckout(){
 
 function scheduleScrollToast(){
   const toast = document.getElementById('scrollToast');
+
+  // only worth nudging people to scroll once there's actually enough
+  // board content below to make it feel worthwhile
+  if(entries.length <= 6) return;
+
   setTimeout(()=>{
     toast.classList.add('show');
   }, 900);
