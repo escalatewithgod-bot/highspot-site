@@ -31,7 +31,6 @@
     min-height:100vh;
     padding-bottom:60px;
   }
-  /* belt-and-suspenders against forced/auto dark-mode rendering */
   @media (prefers-color-scheme: dark){
     html, body{ background:#ffffff !important; color:#111111 !important; }
   }
@@ -73,7 +72,6 @@
     margin:0 0 22px;max-width:44ch;
   }
 
-  /* top card */
   .top-card{
     border:1.5px solid var(--orange);
     border-radius:14px;
@@ -104,7 +102,6 @@
   .bid-amt{font-size:16.5px;font-weight:800;color:var(--orange);}
   .clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
 
-  /* form */
   .panel{
     border:1.5px solid var(--line);
     border-radius:14px;
@@ -141,7 +138,6 @@
   .field input:focus{border-color:var(--orange);}
   .charcount{font-size:10.5px;color:var(--muted2);text-align:right;margin-top:4px;font-family:'Space Mono',monospace;}
 
-  /* bid stepper */
   .stepper-label{
     font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;
     margin-bottom:7px;font-family:'Space Mono',monospace;
@@ -193,7 +189,6 @@
   .err{color:var(--orange);font-size:12.5px;margin-top:9px;text-align:center;min-height:0;font-weight:600;}
   .hint{font-size:12px;color:var(--muted2);margin-top:10px;text-align:center;}
 
-  /* board */
   .board-list{display:flex;flex-direction:column;}
   .b-row{
     display:flex;align-items:center;gap:13px;
@@ -218,7 +213,6 @@
   .loading{text-align:center;color:var(--muted2);font-size:13px;padding:30px 0;font-family:'Space Mono',monospace;}
   .footnote{text-align:center;font-size:11px;color:var(--muted2);margin-top:20px;font-family:'Space Mono',monospace;}
 
-  /* returning-bidder banner */
   .comeback{
     display:flex;align-items:center;gap:11px;
     background:#101d3c;color:#fff;
@@ -237,7 +231,6 @@
     font-size:14px;cursor:pointer;padding:2px 4px;
   }
 
-  /* scroll-down toast */
   .scroll-toast{
     position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
     background:var(--ink);color:#fff;
@@ -260,14 +253,7 @@
 <div class="wrap">
   <header class="top">
     <div class="logo">
-      <span>HighSpo</span>
-      <span class="t-mark">
-        <svg width="20" height="38" viewBox="0 0 24 46" fill="none">
-          <path d="M12 46 V14" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-          <path d="M3 18 H19" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-          <path d="M12 0 L20 12 H4 Z" fill="currentColor"/>
-        </svg>
-      </span>
+      <img src="/logo.png" alt="HighSpot" style="height:30px;display:block;">
     </div>
     <div class="live-badge">
       <div class="live-row"><span class="dot"></span><span id="watchingCount">— watching</span></div>
@@ -286,9 +272,9 @@
 
   <div class="panel">
     <div class="platform-tabs" id="platformTabs">
-      <div class="p-tab active" data-platform="tiktok">♪ TikTok</div>
-      <div class="p-tab" data-platform="instagram">◎ Instagram</div>
-      <div class="p-tab" data-platform="link">🔗 Link</div>
+      <div class="p-tab active" data-platform="tiktok"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg> TikTok</div>
+      <div class="p-tab" data-platform="instagram"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg> Instagram</div>
+      <div class="p-tab" data-platform="link"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="7"/><ellipse cx="8" cy="8" rx="3" ry="7"/><line x1="1" y1="8" x2="15" y2="8"/></svg> Link</div>
     </div>
 
     <div class="field">
@@ -326,12 +312,14 @@
   <span id="scrollToastText">↓ more spots below</span>
 </div>
 
-
-
 <script>
-const MIN_NEW_BID = 5;
+const MIN_NEW_BID = 1;
 const MIN_BID = 1;
-const platformIcons = { tiktok: '♪', instagram: '◎', link: '🔗' };
+const platformIcons = {
+  tiktok: '<svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="vertical-align:-1px"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg>',
+  instagram: '<svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="vertical-align:-1px"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/></svg>',
+  link: '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" style="vertical-align:-1px"><circle cx="8" cy="8" r="7"/><ellipse cx="8" cy="8" rx="3" ry="7"/><line x1="1" y1="8" x2="15" y2="8"/></svg>'
+};
 const AVATAR_COLORS = ['#2f6fed','#7a3ff0','#0fa36b','#e0663b','#c23b6f','#d4a017','#3ba3c9'];
 
 let entries = [];
@@ -340,6 +328,11 @@ let watchingBase = 280 + Math.floor(Math.random()*60);
 let bidAmount = MIN_BID;
 let pendingEntry = null;
 const MY_BIDS_KEY = 'topspo-my-bids';
+const BLOCKED_TERMS = ['pornhub','xvideos','xnxx','xhamster','youporn','redtube','brazzers','onlyfans','chaturbate','stripchat','spankbang','tube8','camsoda','myfreecams','livejasmin','xxx','porn','nsfw'];
+function isBlocked(text){
+  const lower = (text || '').toLowerCase();
+  return BLOCKED_TERMS.some(term => lower.includes(term));
+}
 
 function colorFor(handle){
   let h = 0;
@@ -360,7 +353,7 @@ function renderTopCard(){
   const holder = document.getElementById('topCardHolder');
   const priceDisplay = document.getElementById('topPriceDisplay');
   if(entries.length === 0){
-    priceDisplay.textContent = '$5';
+    priceDisplay.textContent = '$1';
     holder.innerHTML = '';
     return;
   }
@@ -388,6 +381,10 @@ function renderTopCard(){
 function renderBoard(){
   const list = document.getElementById('boardList');
   const rest = entries.slice(1);
+  if(entries.length === 0){
+    list.innerHTML = '<div class="empty">no bids yet — be the first to claim #1</div>';
+    return;
+  }
   if(rest.length === 0){
     list.innerHTML = '<div class="empty">no other spots yet — be the first to grab #2</div>';
     return;
@@ -432,7 +429,6 @@ async function loadEntries(){
   handleReturnFromCheckout();
 }
 
-/* ---- personal bid history (private to this browser, localStorage) ---- */
 function rememberMyBid(handle, bid, platform){
   let mine = [];
   try{ mine = JSON.parse(localStorage.getItem(MY_BIDS_KEY) || '[]'); }catch(e){ mine = []; }
@@ -451,7 +447,7 @@ function checkComeback(){
   const last = mine[0];
   const topBid = entries[0].bid;
   const stillTop = entries[0].handle.toLowerCase() === last.handle.toLowerCase();
-  if(stillTop) return; // they're already #1, nothing to prompt
+  if(stillTop) return;
 
   const banner = document.getElementById('comebackBanner');
   banner.innerHTML = `
@@ -475,7 +471,6 @@ function checkComeback(){
   document.getElementById('comebackClose').addEventListener('click', ()=>{ banner.innerHTML = ''; });
 }
 
-/* ---- handle the redirect back from Stripe Checkout ---- */
 function handleReturnFromCheckout(){
   const params = new URLSearchParams(window.location.search);
   if(params.get('paid') === '1'){
@@ -497,7 +492,6 @@ function handleReturnFromCheckout(){
   }
 }
 
-/* ---- scroll-down nudge ---- */
 function scheduleScrollToast(){
   const toast = document.getElementById('scrollToast');
   setTimeout(()=>{
@@ -511,7 +505,6 @@ function scheduleScrollToast(){
     hide();
   });
 }
-
 
 document.getElementById('platformTabs').addEventListener('click', (e)=>{
   const tab = e.target.closest('.p-tab');
@@ -557,13 +550,16 @@ document.getElementById('submitBtn').addEventListener('click', async ()=>{
     errEl.textContent = `New spots start at $${MIN_NEW_BID}.`;
     return;
   }
+  if(isBlocked(handleRaw) || isBlocked(tagline)){
+    errEl.textContent = 'That handle or link isn\'t allowed.';
+    return;
+  }
 
   const handle = selectedPlatform === 'link' || handleRaw.startsWith('@') || handleRaw.includes('.')
     ? handleRaw
     : '@' + handleRaw;
 
   pendingEntry = { handleRaw: handle, tagline, bid, platform: selectedPlatform };
-  // remembered locally now, confirmed for real once Stripe redirects back with ?paid=1
   sessionStorage.setItem('pendingBid', JSON.stringify(pendingEntry));
 
   btn.disabled = true;
@@ -577,7 +573,7 @@ document.getElementById('submitBtn').addEventListener('click', async ()=>{
     });
     const data = await res.json();
     if(!res.ok || !data.url) throw new Error(data.error || 'Checkout failed');
-    window.location.href = data.url; // → Stripe-hosted Checkout page
+    window.location.href = data.url;
   }catch(e){
     errEl.textContent = 'Could not start checkout — try again.';
     btn.disabled = false;
