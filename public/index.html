@@ -8,13 +8,14 @@
 <title>HighSpot — Claim the board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
   :root{
     color-scheme: light only;
     --bg:#ffffff;
     --ink:#111111;
-    --muted:#9a958c;
-    --muted2:#b5b0a6;
+    --muted:#6e6759;
+    --muted2:#847c6c;
     --line:#e8e4dc;
     --orange:#ff5a36;
     --orange-tint:#fff1ed;
@@ -94,7 +95,7 @@
   .entry-body{flex:1;min-width:0;}
   .handle-line{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15.5px;}
   .platform-ic{font-size:12.5px;opacity:0.75;}
-  .tagline{color:#9a958c;font-size:13px;margin-top:2px;line-height:1.4;}
+  .tagline{color:#6e6759;font-size:13px;margin-top:2px;line-height:1.4;}
   .bid-figs{text-align:right;flex-shrink:0;}
   .bid-amt{font-size:16.5px;font-weight:800;color:var(--orange);}
   .clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
@@ -221,7 +222,7 @@
   }
   .b-body{flex:1;min-width:0;}
   .b-handle{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
-  .b-tagline{color:#9a958c;font-size:12px;margin-top:1px;line-height:1.35;}
+  .b-tagline{color:#6e6759;font-size:12px;margin-top:1px;line-height:1.35;}
   .b-figs{text-align:right;flex-shrink:0;}
   .b-amt{font-size:14.5px;font-weight:800;color:var(--ink);}
   .b-clicks{font-size:10.5px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;}
@@ -352,11 +353,33 @@ const AVATAR_COLORS = ['#2f6fed','#7a3ff0','#0fa36b','#e0663b','#c23b6f','#d4a01
 
 let entries = [];
 let selectedPlatform = 'tiktok';
-let watchingBase = 280 + Math.floor(Math.random()*60);
 let bidAmount = MIN_BID;
 let pendingEntry = null;
 let selectedAvatarDataUrl = null; // compressed image ready to upload, or null
 const MY_BIDS_KEY = 'topspo-my-bids';
+
+/* ---- real live "watching" count via Supabase Realtime Presence ---- */
+const SUPABASE_URL = 'https://kcxjlgibpfoszzyuqbvc.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeGpsZ2licGZvc3p6eXVxYnZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1Mzg4NzgsImV4cCI6MjEwMzExNDg3OH0.2oUe_Qm9skUFXN6mLGAr-5l02nDmhxrwJkIIkiF176A';
+let liveWatchingCount = 1; // fallback while connecting
+function initPresence(){
+  try{
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    window.sbClient = sb; // shared client, also used for click tracking
+    const myKey = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0,12);
+    const channel = sb.channel('board-presence', { config: { presence: { key: myKey } } });
+    channel.on('presence', { event: 'sync' }, ()=>{
+      const state = channel.presenceState();
+      liveWatchingCount = Object.keys(state).length || 1;
+      document.getElementById('watchingCount').textContent = liveWatchingCount + ' watching';
+    });
+    channel.subscribe(async (status)=>{
+      if(status === 'SUBSCRIBED'){ await channel.track({ online_at: Date.now() }); }
+    });
+  }catch(e){
+    document.getElementById('watchingCount').textContent = '— watching';
+  }
+}
 const BLOCKED_TERMS = ['pornhub','xvideos','xnxx','xhamster','youporn','redtube','brazzers','onlyfans','chaturbate','stripchat','spankbang','tube8','camsoda','myfreecams','livejasmin','xxx','porn','nsfw'];
 function isBlocked(text){
   const lower = (text || '').toLowerCase();
@@ -378,6 +401,23 @@ function escapeHtml(s){
   return d.innerHTML;
 }
 
+function outboundUrl(entry){
+  const clean = entry.handle.replace(/^@/,'');
+  if(entry.platform === 'tiktok') return `https://www.tiktok.com/@${clean}`;
+  if(entry.platform === 'instagram') return `https://www.instagram.com/${clean}`;
+  // link platform: use what they typed, add https:// if missing
+  return /^https?:\/\//i.test(clean) ? clean : `https://${clean}`;
+}
+
+async function trackClick(entry){
+  try{
+    if(window.sbClient){
+      await window.sbClient.rpc('increment_clicks', { p_handle: entry.handle, p_platform: entry.platform });
+    }
+  }catch(e){ /* non-fatal — still open the link either way */ }
+  window.open(outboundUrl(entry), '_blank');
+}
+
 function avatarHtml(entry, sizeClass){
   if(entry.avatar_url){
     return `<div class="${sizeClass}" style="padding:0;overflow:hidden;"><img src="${escapeHtml(entry.avatar_url)}" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`;
@@ -396,7 +436,7 @@ function renderTopCard(){
   const top = entries[0];
   priceDisplay.textContent = '$' + top.bid;
   holder.innerHTML = `
-    <div class="top-card">
+    <div class="top-card" style="cursor:pointer;">
       <div class="crown-row">🔥 currently #1</div>
       <div class="row">
         <div class="rank-num">#1</div>
@@ -412,6 +452,7 @@ function renderTopCard(){
       </div>
     </div>
   `;
+  holder.querySelector('.top-card').addEventListener('click', ()=> trackClick(top));
 }
 
 function renderBoard(){
@@ -426,7 +467,7 @@ function renderBoard(){
     return;
   }
   list.innerHTML = rest.map((e, i) => `
-    <div class="b-row">
+    <div class="b-row" style="cursor:pointer;" data-idx="${i}">
       <div class="b-rank">${String(i+2).padStart(2,'0')}</div>
       ${avatarHtml(e, 'b-avatar')}
       <div class="b-body">
@@ -439,14 +480,16 @@ function renderBoard(){
       </div>
     </div>
   `).join('');
+  list.querySelectorAll('.b-row').forEach(row=>{
+    row.addEventListener('click', ()=> trackClick(rest[Number(row.dataset.idx)]));
+  });
 }
 
 function renderAll(){
   renderTopCard();
   renderBoard();
   const totalClicks = entries.reduce((a,e)=>a+(e.clicks||0),0);
-  document.getElementById('watchingCount').textContent =
-    (watchingBase + (totalClicks % 40)) + ' watching';
+  document.getElementById('watchingCount').textContent = liveWatchingCount + ' watching';
   document.getElementById('totalClicks').textContent =
     (totalClicks >= 1000 ? (totalClicks/1000).toFixed(1)+'k' : totalClicks) + ' total clicks';
 }
@@ -663,6 +706,7 @@ document.getElementById('submitBtn').addEventListener('click', async ()=>{
 });
 
 loadEntries();
+initPresence();
 </script>
 
 </body>
