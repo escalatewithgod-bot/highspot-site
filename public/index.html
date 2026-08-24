@@ -115,24 +115,44 @@
   .tagline{color:#3d382e;font-size:14px;font-weight:500;margin-top:3px;line-height:1.45;}
   .bid-figs{text-align:right;flex-shrink:0;}
   .bid-amt{font-size:16.5px;font-weight:800;color:var(--orange);}
-  .clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
+  .clicks{font-size:12px;color:#57503f;margin-top:2px;font-family:'Space Mono',monospace;}
 
   .panel-inner{ padding-top:2px; }
 
   /* "add your listing" trigger button, replacing the always-visible form */
   .add-listing-btn{
     width:100%;
-    padding:13px;
-    border:1.5px dashed var(--orange);
+    padding:14px;
+    border:none;
     border-radius:12px;
     background:var(--orange-tint);
     color:var(--orange);
-    font-weight:700;font-size:14px;
+    font-weight:700;font-size:14.5px;
     display:flex;align-items:center;justify-content:center;gap:8px;
     cursor:pointer;margin-bottom:24px;
+    position:relative;
+    overflow:hidden;
   }
+  .add-listing-btn:active{transform:scale(0.99);}
+  .add-listing-btn .march-outline{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;
+  }
+  .add-listing-btn .march-outline rect{
+    fill:none;
+    stroke:var(--orange);
+    stroke-opacity:0.9;
+    stroke-width:1.5;
+    stroke-dasharray:7 6;
+    animation:marchRight 1s linear infinite;
+  }
+  @keyframes marchRight{ to{ stroke-dashoffset:-26; } }
+  @media (prefers-reduced-motion: reduce){
+    .add-listing-btn .march-outline rect{ animation:none; }
+  }
+  .add-listing-btn .btn-label{position:relative;z-index:1;display:flex;align-items:center;gap:8px;}
   .board-head-label{
-    font-size:11.5px;color:var(--muted2);font-weight:700;text-transform:uppercase;
+    font-size:12.5px;color:#57503f;font-weight:700;text-transform:uppercase;
     letter-spacing:.05em;margin-bottom:8px;font-family:'Space Mono',monospace;
   }
 
@@ -187,7 +207,7 @@
   }
   .field input::placeholder{color:#c3beb2;}
   .field input:focus{border-color:var(--orange);}
-  .charcount{font-size:10px;color:var(--muted2);text-align:right;margin-top:2px;font-family:'Space Mono',monospace;}
+  .charcount{font-size:11px;color:#847c6c;text-align:right;margin-top:3px;font-family:'Space Mono',monospace;}
 
   .avatar-picker{
     display:flex;align-items:center;gap:11px;
@@ -207,10 +227,10 @@
   .avatar-preview img{width:100%;height:100%;object-fit:cover;}
   .avatar-picker-text{display:flex;flex-direction:column;gap:1px;}
   .avatar-picker-text span:first-child{font-size:13px;font-weight:600;color:var(--ink);}
-  .avatar-picker-sub{font-size:10.5px;color:var(--muted2);}
+  .avatar-picker-sub{font-size:11.5px;color:#6e6759;}
 
   .stepper-label{
-    font-size:10.5px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;
+    font-size:11.5px;color:#57503f;text-transform:uppercase;letter-spacing:0.06em;
     margin-bottom:5px;font-family:'Space Mono',monospace;
   }
   .stepper-field{
@@ -251,7 +271,7 @@
     -webkit-appearance:none;margin:0;
   }
   .stepper-amount input:focus{color:var(--orange);}
-  .stepper-hint{font-size:10px;color:var(--muted2);text-align:center;margin:-2px 0 8px;font-family:'Space Mono',monospace;}
+  .stepper-hint{font-size:11.5px;color:#57503f;text-align:center;margin:-2px 0 8px;font-family:'Space Mono',monospace;}
 
   .submit-btn{
     width:100%;
@@ -292,7 +312,7 @@
   .b-row.expanded .b-tagline{display:block;}
   .b-figs{display:flex;align-items:center;gap:8px;flex-shrink:0;}
   .b-amt{font-size:14px;font-weight:800;color:var(--ink);}
-  .b-clicks{font-size:10.5px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;display:none;}
+  .b-clicks{font-size:11.5px;color:#57503f;margin-top:1px;font-family:'Space Mono',monospace;display:none;}
   .b-row.expanded .b-clicks{display:block;}
   .expand-btn{
     width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:#fff;
@@ -303,7 +323,7 @@
 
   .empty{text-align:center;color:var(--muted2);font-size:13px;padding:20px 0;}
   .loading{text-align:center;color:var(--muted2);font-size:13px;padding:30px 0;font-family:'Space Mono',monospace;}
-  .footnote{text-align:center;font-size:11px;color:var(--muted2);margin-top:20px;font-family:'Space Mono',monospace;}
+  .footnote{text-align:center;font-size:12px;color:#57503f;margin-top:20px;line-height:1.6;font-family:'Space Mono',monospace;}
 
   .comeback{
     display:flex;align-items:center;gap:11px;
@@ -367,7 +387,12 @@
 
   <div id="topCardHolder"></div>
 
-  <button class="add-listing-btn" id="openAddModal" type="button">＋ Add your listing to the board</button>
+  <button class="add-listing-btn" id="openAddModal" type="button">
+    <svg class="march-outline" id="marchOutline" preserveAspectRatio="none">
+      <rect id="marchRect" fill="none"/>
+    </svg>
+    <span class="btn-label">＋ Add your listing to the board</span>
+  </button>
 
   <div id="boardSection">
     <div class="board-head-label">the board</div>
@@ -377,6 +402,7 @@
   </div>
 
   <div class="footnote">bids are stored live and visible to anyone who opens this board</div>
+  <div class="footnote"><a href="/about.html" style="color:inherit;">about this site & our stats →</a></div>
 </div>
 
 <div class="modal-overlay" id="addModalOverlay">
@@ -545,7 +571,7 @@ function renderTopCard(){
     return;
   }
   const top = entries[0];
-  priceDisplay.textContent = '$' + top.bid;
+  priceDisplay.textContent = '$' + (top.bid + 1);
   holder.innerHTML = `
     <div class="top-card" style="cursor:pointer;">
       <div class="crown-row">🔥 currently #1</div>
@@ -624,7 +650,7 @@ async function loadEntries(){
     entries = data || [];
   }catch(e){ entries = []; }
   entries.sort((a,b)=> b.bid - a.bid || a.ts - b.ts);
-  bidAmount = entries.length === 0 ? MIN_NEW_BID : MIN_BID;
+  bidAmount = entries.length === 0 ? MIN_NEW_BID : entries[0].bid + 1;
   document.getElementById('bidAmountDisplay').textContent = bidAmount;
   renderAll();
   checkComeback();
@@ -884,6 +910,28 @@ document.getElementById('submitBtn').addEventListener('click', async ()=>{
 document.addEventListener('contextmenu', (e)=>{
   if(!['INPUT','TEXTAREA'].includes(e.target.tagName)) e.preventDefault();
 });
+
+/* ---- size the marching-dashes outline to the button's real pixel
+   dimensions, so the rounded corners never get stretched/distorted ---- */
+function sizeMarchOutline(){
+  const btn = document.getElementById('openAddModal');
+  const svg = document.getElementById('marchOutline');
+  const rect = document.getElementById('marchRect');
+  if(!btn || !svg || !rect) return;
+  const w = btn.offsetWidth, h = btn.offsetHeight;
+  if(!w || !h) return;
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  rect.setAttribute('x', 1);
+  rect.setAttribute('y', 1);
+  rect.setAttribute('width', w - 2);
+  rect.setAttribute('height', h - 2);
+  rect.setAttribute('rx', 12);
+}
+window.addEventListener('resize', sizeMarchOutline);
+window.addEventListener('load', sizeMarchOutline);
+setTimeout(sizeMarchOutline, 50); // catch late font/layout shifts
 
 loadEntries();
 initPresence();
