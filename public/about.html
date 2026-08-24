@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: light only;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="color-scheme" content="light only">
+<title>About HighSpot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: light only;
+    --bg:#fff; --ink:#111; --muted:#57503f; --line:#e8e4dc;
+    --orange:#ff5a36; --orange-tint:#fff1ed; --green:#4cae6b; --navy:#101d3c;
+  }
+  *{box-sizing:border-box;}
+  html{color-scheme:light only;background:#fff;}
+  body{
+    margin:0;background:#fff !important;color:var(--ink);
+    font-family:'Inter',sans-serif;padding-bottom:60px;
+  }
+  @media (prefers-color-scheme: dark){ html, body{ background:#fff !important; color:#111 !important; } }
+  .wrap{max-width:560px;margin:0 auto;padding:0 22px;}
+
+  .back{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;
+    padding:22px 0 6px;
+  }
+
+  h1{font-size:28px;font-weight:800;letter-spacing:-0.01em;margin:14px 0 6px;}
+  .sub{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 28px;}
+
+  h2{font-size:15px;font-weight:800;margin:28px 0 8px;display:flex;align-items:center;gap:8px;}
+  h2 .ic{font-size:15px;}
+  p{color:#3d382e;font-size:14.5px;line-height:1.65;margin:0 0 10px;}
+
+  .card{
+    border:1.5px solid var(--line);border-radius:14px;padding:16px;margin:10px 0 4px;
+  }
+  .stat-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;}
+  .stat-row:last-child{border-bottom:none;}
+  .stat-row .label{color:var(--muted);}
+  .stat-row .val{font-weight:700;color:var(--green);}
+
+  .foot{text-align:center;font-size:11px;color:#9a958c;margin-top:40px;font-family:'Space Mono',monospace;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="/">← back to the board</a>
+
+  <h1>What HighSpot actually is</h1>
+  <p class="sub">A small, honest experiment — not a company, not an investment, just a fun test of internet attention.</p>
+
+  <h2><span class="ic">🎯</span> The idea</h2>
+  <p>HighSpot is a pay-to-rank leaderboard. Anyone can bid to put their TikTok, Instagram, or link on the board — outbid the current #1 to take the top spot, or come in under it and still land a seat further down. It's a lighthearted riff on the internet's obsession with rankings and attention, built as a small side project.</p>
+
+  <h2><span class="ic">📊</span> The stats are real</h2>
+  <p>Every number on this site reflects something that actually happened — nothing here is randomized or invented to make the site look busier than it is:</p>
+  <div class="card">
+    <div class="stat-row"><span class="label">"Online" count</span><span class="val">live, real-time</span></div>
+    <div class="stat-row"><span class="label">"Visitors since launch"</span><span class="val">real, counted once per visit</span></div>
+    <div class="stat-row"><span class="label">Click counts per listing</span><span class="val">real, only rise on actual taps</span></div>
+    <div class="stat-row"><span class="label">Bids and rankings</span><span class="val">real, processed through Stripe</span></div>
+  </div>
+  <p>If a number looks unimpressive some days, that's because it's genuinely small some days — that's the deal.</p>
+
+  <h2><span class="ic">💳</span> How bidding works</h2>
+  <p>Any bid, however small, gets you a real spot on the board — you don't need to beat #1 to appear, only to become #1. Payments are processed securely through Stripe; nobody at HighSpot ever sees or stores your card details.</p>
+
+  <h2><span class="ic">🚫</span> What's not allowed</h2>
+  <p>Links to adult content are automatically blocked. Beyond that, use good judgment — this is meant to be a fun, low-stakes experiment, not a place for anything harmful.</p>
+
+  <h2><span class="ic">🔍</span> Why be this transparent</h2>
+  <p>Because the whole point of this experiment is seeing what genuinely happens when real people decide something is worth a dollar or two of their attention — inflated numbers would just defeat the purpose.</p>
+
+  <div class="foot">HighSpot · an independent experiment, not affiliated with any social platform</div>
+</div>
+
+</body>
+</html>
