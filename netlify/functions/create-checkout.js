@@ -11,7 +11,7 @@ exports.handler = async (event) => {
     return { statusCode: 405, body: 'Method not allowed' };
   }
 
-  const { handle, platform, tagline, bid } = JSON.parse(event.body || '{}');
+  const { handle, platform, tagline, bid, avatarUrl } = JSON.parse(event.body || '{}');
 
   if (!handle || !bid || bid < 1) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing handle or bid' }) };
@@ -38,7 +38,7 @@ exports.handler = async (event) => {
     ],
     // Stash the bid details on the session so the webhook can write them
     // to the database only *after* payment actually succeeds.
-    metadata: { handle, platform, tagline: tagline || '', bid: String(bid) },
+    metadata: { handle, platform, tagline: tagline || '', bid: String(bid), avatarUrl: avatarUrl || '' },
     success_url: `${siteUrl}/?paid=1`,
     cancel_url: `${siteUrl}/?canceled=1`,
   });
