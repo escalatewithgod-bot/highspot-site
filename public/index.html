@@ -93,7 +93,48 @@
     padding:18px 18px 16px;
     margin-bottom:22px;
     background:#fff;
-    box-shadow:0 8px 24px -14px rgba(255,90,54,0.35);
+    animation:topGlow 3s ease-in-out infinite;
+    position:relative;
+  }
+  @keyframes topGlow{
+    0%,100%{ box-shadow:0 8px 24px -14px rgba(255,90,54,0.35); }
+    50%{ box-shadow:0 10px 30px -12px rgba(255,90,54,0.6); }
+  }
+  .star-wrap{
+    position:absolute;
+    top:-18px; right:-16px;
+    width:56px; height:56px;
+    pointer-events:none;
+  }
+  .corner-star{
+    position:absolute;
+    top:8px; right:6px;
+    width:46px;height:46px;
+    transform-origin:50% 50%;
+    filter:drop-shadow(0 3px 6px rgba(0,0,0,0.22)) drop-shadow(0 0 10px rgba(255,196,0,0.55));
+    animation:starWobble 2.6s ease-in-out infinite;
+  }
+  @keyframes starWobble{
+    0%,100%{ transform:rotate(8deg); }
+    50%{ transform:rotate(28deg); }
+  }
+  .sparkle{
+    position:absolute;
+    color:#ffd447;
+    text-shadow:0 0 5px rgba(255,196,0,0.9);
+    animation:sparkleTwinkle 1.8s ease-in-out infinite;
+  }
+  .sparkle.s1{ top:0px; left:2px; font-size:9px; animation-delay:0s; }
+  .sparkle.s2{ top:34px; left:0px; font-size:7px; animation-delay:0.6s; }
+  .sparkle.s3{ top:4px; left:44px; font-size:8px; animation-delay:1.1s; }
+  @keyframes sparkleTwinkle{
+    0%,100%{ opacity:0; transform:scale(0.4); }
+    50%{ opacity:1; transform:scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .top-card{ animation:none; box-shadow:0 8px 24px -14px rgba(255,90,54,0.35); }
+    .corner-star{ animation:none; transform:rotate(18deg); }
+    .sparkle{ animation:none; opacity:0; }
   }
   .crown-row{
     display:flex;align-items:center;gap:6px;
@@ -101,12 +142,16 @@
     color:var(--orange);text-transform:uppercase;
     margin-bottom:14px;
   }
+  .last-bid-ago{
+    color:#8a8272;font-weight:600;letter-spacing:normal;text-transform:none;
+    font-family:'Space Mono',monospace;font-size:10.5px;
+  }
   .top-card .row{display:flex;align-items:center;gap:14px;}
   .rank-num{font-size:26px;font-weight:800;width:38px;flex-shrink:0;color:var(--ink);}
   .avatar{
-    width:36px;height:36px;border-radius:9px;
+    width:44px;height:44px;border-radius:11px;
     display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:14px;color:#fff;
+    font-weight:800;font-size:16px;color:#fff;
     flex-shrink:0;
   }
   .entry-body{flex:1;min-width:0;}
@@ -151,6 +196,29 @@
     .add-listing-btn .march-outline rect{ animation:none; }
   }
   .add-listing-btn .btn-label{position:relative;z-index:1;display:flex;align-items:center;gap:8px;}
+  /* #2 / #3 podium tier — clearly a step above the collapsed rows below them */
+  .podium-card{
+    display:flex;align-items:center;gap:12px;
+    border-radius:13px;padding:13px 14px;margin-bottom:10px;
+    border:1.5px solid var(--line);background:#fff;
+    cursor:pointer;
+  }
+  .podium-card.silver{}
+  .podium-card.bronze{}
+  .podium-rank{font-size:19px;font-weight:800;width:28px;flex-shrink:0;color:var(--ink);}
+  .podium-avatar{
+    width:40px;height:40px;border-radius:10px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;color:#fff;
+  }
+  .podium-body{flex:1;min-width:0;}
+  .podium-handle{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:6px;color:var(--ink);}
+  .podium-medal{font-size:14px;}
+  .podium-tagline{color:#3d382e;font-size:12.5px;font-weight:500;margin-top:3px;line-height:1.4;}
+  .podium-figs{text-align:right;flex-shrink:0;}
+  .podium-amt{font-weight:800;font-size:15px;color:var(--ink);}
+  .podium-clicks{font-size:11px;color:#57503f;margin-top:2px;font-family:'Space Mono',monospace;}
+
   .board-head-label{
     font-size:12.5px;color:#57503f;font-weight:700;text-transform:uppercase;
     letter-spacing:.05em;margin-bottom:8px;font-family:'Space Mono',monospace;
@@ -294,32 +362,25 @@
 
   .board-list{display:flex;flex-direction:column;}
   .b-row{
-    display:flex;align-items:center;gap:11px;
-    padding:12px 0;
+    display:flex;align-items:center;gap:13px;
+    padding:14px 0;
     border-bottom:1px solid var(--line);
     cursor:pointer;
   }
   .b-row:last-child{border-bottom:none;}
-  .b-rank{font-size:12px;font-weight:700;color:var(--muted2);width:18px;flex-shrink:0;font-family:'Space Mono',monospace;}
+  .b-rank{font-size:13px;font-weight:700;color:var(--muted2);width:20px;flex-shrink:0;font-family:'Space Mono',monospace;}
   .b-avatar{
-    width:32px;height:32px;border-radius:8px;
+    width:40px;height:40px;border-radius:10px;
     display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:12px;color:#fff;flex-shrink:0;
+    font-weight:800;font-size:14.5px;color:#fff;flex-shrink:0;
   }
   .b-body{flex:1;min-width:0;}
-  .b-handle{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
-  .b-tagline{color:#3d382e;font-size:12.5px;font-weight:500;margin-top:4px;line-height:1.45;display:none;}
-  .b-row.expanded .b-tagline{display:block;}
-  .b-figs{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-  .b-amt{font-size:14px;font-weight:800;color:var(--ink);}
-  .b-clicks{font-size:11.5px;color:#57503f;margin-top:1px;font-family:'Space Mono',monospace;display:none;}
-  .b-row.expanded .b-clicks{display:block;}
-  .expand-btn{
-    width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:#fff;
-    display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted2);
-    flex-shrink:0;cursor:pointer;transition:transform .15s;
-  }
-  .b-row.expanded .expand-btn{transform:rotate(180deg);}
+  .b-handle{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
+  .b-tagline{color:#3d382e;font-size:13px;font-weight:500;margin-top:4px;line-height:1.45;}
+  .b-figs{display:flex;align-items:center;flex-shrink:0;}
+  .b-figs-amts{display:flex;flex-direction:column;align-items:flex-end;}
+  .b-amt{font-size:15px;font-weight:800;color:var(--ink);}
+  .b-clicks{font-size:12px;color:#57503f;margin-top:1px;font-family:'Space Mono',monospace;}
 
   .empty{text-align:center;color:var(--muted2);font-size:13px;padding:20px 0;}
   .loading{text-align:center;color:var(--muted2);font-size:13px;padding:30px 0;font-family:'Space Mono',monospace;}
@@ -363,6 +424,10 @@
 <body>
 
 <div class="wrap">
+  <div style="background:#fff8ed;border:1px solid #f0dcae;border-radius:10px;padding:9px 13px;font-size:11.5px;color:#7a5c1e;margin:16px 0 0;line-height:1.5;">
+    Preview only — 12 example listings, no real data. This never touches your live site.
+  </div>
+
   <header class="top">
     <div class="logo">
       <img src="/logo.png" alt="HighSpot">
@@ -391,8 +456,10 @@
     <svg class="march-outline" id="marchOutline" preserveAspectRatio="none">
       <rect id="marchRect" fill="none"/>
     </svg>
-    <span class="btn-label">＋ Add your listing to the board</span>
+    <span class="btn-label">＋ Add your listing — starts at $1</span>
   </button>
+
+  <div id="podiumHolder"></div>
 
   <div id="boardSection">
     <div class="board-head-label">the board</div>
@@ -476,48 +543,13 @@ let selectedPlatform = 'tiktok';
 let bidAmount = MIN_BID;
 let pendingEntry = null;
 let selectedAvatarDataUrl = null; // compressed image ready to upload, or null
-const MY_BIDS_KEY = 'topspo-my-bids';
+const MY_BIDS_KEY = 'topspo-my-bids-demo'; // separate key so this demo never touches your real bid history
 
-/* ---- shared Supabase client, board reads, real "watching" count via Realtime Presence ---- */
-const SUPABASE_URL = 'https://kcxjlgibpfoszzyuqbvc.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeGpsZ2licGZvc3p6eXVxYnZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1Mzg4NzgsImV4cCI6MjEwMzExNDg3OH0.2oUe_Qm9skUFXN6mLGAr-5l02nDmhxrwJkIIkiF176A';
-window.sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let liveWatchingCount = 1; // fallback while connecting
+/* ---- DEMO MODE: fake stats, no real Supabase connection ---- */
+let liveWatchingCount = 212;
 function initPresence(){
-  try{
-    const sb = window.sbClient;
-    const myKey = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0,12);
-    const channel = sb.channel('board-presence', { config: { presence: { key: myKey } } });
-    channel.on('presence', { event: 'sync' }, ()=>{
-      const state = channel.presenceState();
-      liveWatchingCount = Object.keys(state).length || 1;
-      document.getElementById('statsOnline').textContent = liveWatchingCount + ' online';
-    });
-    channel.subscribe(async (status)=>{
-      if(status === 'SUBSCRIBED'){ await channel.track({ online_at: Date.now() }); }
-    });
-    initVisitCounter(sb);
-  }catch(e){
-    document.getElementById('statsOnline').textContent = '— online';
-  }
-}
-
-/* ---- lifetime visitor counter ---- */
-async function initVisitCounter(sb){
-  const totalEl = document.getElementById('statsTotal');
-  try{
-    // count this as a new visit once per browser tab session, not on every reload
-    const alreadyCounted = sessionStorage.getItem('hs_visit_counted');
-    if(!alreadyCounted){
-      await sb.rpc('increment_visits');
-      sessionStorage.setItem('hs_visit_counted', '1');
-    }
-    const { data, error } = await sb.from('site_stats').select('total_visits').eq('id', 1).single();
-    if(error || !data) throw error || new Error('no data');
-    totalEl.textContent = data.total_visits.toLocaleString() + ' visitors since launch';
-  }catch(e){
-    totalEl.textContent = 'visitors since launch';
-  }
+  document.getElementById('statsOnline').textContent = liveWatchingCount + ' online';
+  document.getElementById('statsTotal').textContent = '8,402 visitors since launch';
 }
 
 const BLOCKED_TERMS = ['pornhub','xvideos','xnxx','xhamster','youporn','redtube','brazzers','onlyfans','chaturbate','stripchat','spankbang','tube8','camsoda','myfreecams','livejasmin','xxx','porn','nsfw'];
@@ -550,11 +582,7 @@ function outboundUrl(entry){
 }
 
 async function trackClick(entry){
-  try{
-    if(window.sbClient){
-      await window.sbClient.rpc('increment_clicks', { p_handle: entry.handle, p_platform: entry.platform });
-    }
-  }catch(e){ /* non-fatal — still open the link either way */ }
+  // demo mode: no real click tracking, just open the link
   window.open(outboundUrl(entry), '_blank');
 }
 
@@ -563,6 +591,14 @@ function avatarHtml(entry, sizeClass){
     return `<div class="${sizeClass}" style="padding:0;overflow:hidden;"><img src="${escapeHtml(entry.avatar_url)}" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`;
   }
   return `<div class="${sizeClass}" style="background:${colorFor(entry.handle)}">${initials(entry.handle)}</div>`;
+}
+
+function timeAgo(ts){
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if(s < 60) return 'just now';
+  if(s < 3600) return Math.floor(s/60) + 'm ago';
+  if(s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
 }
 
 function renderTopCard(){
@@ -577,7 +613,30 @@ function renderTopCard(){
   priceDisplay.textContent = '$' + (top.bid + 1);
   holder.innerHTML = `
     <div class="top-card" style="cursor:pointer;">
-      <div class="crown-row">🔥 currently #1</div>
+      <div class="star-wrap">
+        <span class="sparkle s1">✦</span>
+        <span class="sparkle s2">✦</span>
+        <span class="sparkle s3">✦</span>
+        <svg class="corner-star" viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fffceb"/>
+              <stop offset="25%" stop-color="#fff0a8"/>
+              <stop offset="55%" stop-color="#ffd447"/>
+              <stop offset="80%" stop-color="#f0a800"/>
+              <stop offset="100%" stop-color="#c98600"/>
+            </linearGradient>
+            <radialGradient id="starShine" cx="35%" cy="28%" r="45%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+              <stop offset="60%" stop-color="#ffffff" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <path d="M12 2 L14.6 9.2 L22 9.2 L16.1 13.6 L18.4 21 L12 16.6 L5.6 21 L7.9 13.6 L2 9.2 L9.4 9.2 Z" fill="url(#goldGrad)" stroke="#a9700a" stroke-width="0.5"/>
+          <path d="M12 2 L14.6 9.2 L22 9.2 L16.1 13.6 L18.4 21 L12 16.6 L5.6 21 L7.9 13.6 L2 9.2 L9.4 9.2 Z" fill="url(#starShine)"/>
+        </svg>
+      </div>
+      <div class="crown-row">currently #1 <span class="last-bid-ago">· last bid ${timeAgo(top.ts)}</span></div>
       <div class="row">
         <div class="rank-num">#1</div>
         ${avatarHtml(top, 'avatar')}
@@ -592,42 +651,77 @@ function renderTopCard(){
       </div>
     </div>
   `;
-  holder.querySelector('.top-card').addEventListener('click', ()=> trackClick(top));
+  holder.querySelector('.top-card').addEventListener('click', (e)=>{
+    if(e.target.closest('.star-wrap')) return;
+    trackClick(top);
+  });
+}
+
+function renderPodium(){
+  const holder = document.getElementById('podiumHolder');
+  const second = entries[1];
+  const third = entries[2];
+  if(!second && !third){ holder.innerHTML = ''; return; }
+
+  const podiumRow = (entry, rank, tier, medal) => `
+    <div class="podium-card ${tier}" data-podium-rank="${rank}">
+      <div class="podium-rank">#${rank}</div>
+      ${avatarHtml(entry, 'podium-avatar')}
+      <div class="podium-body">
+        <div class="podium-handle"><span class="podium-medal">${medal}</span>${platformIcons[entry.platform]||''} ${escapeHtml(entry.handle)}</div>
+        <div class="podium-tagline">${escapeHtml(entry.tagline || '')}</div>
+      </div>
+      <div class="podium-figs">
+        <div class="podium-amt">$${entry.bid}</div>
+        <div class="podium-clicks">${entry.clicks.toLocaleString()} clicks</div>
+      </div>
+    </div>
+  `;
+
+  let html = '';
+  if(second) html += podiumRow(second, 2, 'silver', '🥈');
+  if(third) html += podiumRow(third, 3, 'bronze', '🥉');
+  holder.innerHTML = html;
+
+  holder.querySelectorAll('.podium-card').forEach(card=>{
+    const rank = Number(card.dataset.podiumRank);
+    const entry = rank === 2 ? second : third;
+    card.addEventListener('click', ()=> trackClick(entry));
+  });
 }
 
 function renderBoard(){
   const list = document.getElementById('boardList');
-  const rest = entries.slice(1);
+  const rest = entries.slice(3); // ranks 4 and below — #2/#3 render separately as the podium tier
   if(entries.length === 0){
     list.innerHTML = '<div class="empty">no bids yet — be the first to claim #1</div>';
     return;
   }
   if(rest.length === 0){
-    list.innerHTML = '<div class="empty">no other spots yet — be the first to grab #2</div>';
+    const msg = entries.length === 1
+      ? 'no other spots yet — be the first to grab #2'
+      : 'more spots open below #3 — jump in';
+    list.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
   list.innerHTML = rest.map((e, i) => `
     <div class="b-row" data-idx="${i}">
-      <div class="b-rank">${String(i+2).padStart(2,'0')}</div>
+      <div class="b-rank">${String(i+4).padStart(2,'0')}</div>
       ${avatarHtml(e, 'b-avatar')}
       <div class="b-body">
         <div class="b-handle"><span>${platformIcons[e.platform]||''}</span>${escapeHtml(e.handle)}</div>
         <div class="b-tagline">${escapeHtml(e.tagline || '')}</div>
-        <div class="b-clicks">${e.clicks.toLocaleString()} clicks</div>
       </div>
       <div class="b-figs">
-        <div class="b-amt">$${e.bid}</div>
-        <div class="expand-btn" data-expand="${i}">⌄</div>
+        <div class="b-figs-amts">
+          <div class="b-amt">$${e.bid}</div>
+          <div class="b-clicks">${e.clicks.toLocaleString()} clicks</div>
+        </div>
       </div>
     </div>
   `).join('');
   list.querySelectorAll('.b-row').forEach(row=>{
-    row.addEventListener('click', (e)=>{
-      if(e.target.closest('.expand-btn')){
-        e.stopPropagation();
-        row.classList.toggle('expanded');
-        return;
-      }
+    row.addEventListener('click', ()=>{
       trackClick(rest[Number(row.dataset.idx)]);
     });
   });
@@ -635,6 +729,7 @@ function renderBoard(){
 
 function renderAll(){
   renderTopCard();
+  renderPodium();
   renderBoard();
   const onlineEl = document.getElementById('statsOnline');
   if(onlineEl && onlineEl.textContent === '— online'){
@@ -642,16 +737,24 @@ function renderAll(){
   }
 }
 
+const EXAMPLE_ENTRIES = [
+  { handle:'@wavydrip', platform:'tiktok', tagline:'daily outfit drops, new vid every night — come see what dropped today', bid:34, clicks:1842, ts:Date.now()-2*60000 },
+  { handle:'@studio.north', platform:'instagram', tagline:'minimal home decor finds worth a scroll, new picks weekly', bid:27, clicks:1105, ts:Date.now()-40*60000 },
+  { handle:'shopcosmic.co', platform:'link', tagline:'20% off everything this week, code COSMIC at checkout', bid:22, clicks:894, ts:Date.now()-2*3600000 },
+  { handle:'@ramenwithred', platform:'tiktok', tagline:'best ramen spots in your city, updated every week', bid:18, clicks:731, ts:Date.now()-5*3600000 },
+  { handle:'@fitwithmara', platform:'tiktok', tagline:'free 7-day workout plan in bio, no gym needed', bid:15, clicks:602, ts:Date.now()-8*3600000 },
+  { handle:'@thriftwithjune', platform:'instagram', tagline:'thrifted fits under $20, styled 5 ways', bid:12, clicks:489, ts:Date.now()-1*86400000 },
+  { handle:'nightowlbrew.co', platform:'link', tagline:'small batch cold brew, ships nationwide', bid:9, clicks:355, ts:Date.now()-1.5*86400000 },
+  { handle:'@dogsofcamille', platform:'instagram', tagline:'one very good dog, daily updates', bid:7, clicks:298, ts:Date.now()-2*86400000 },
+  { handle:'@quickrecipes', platform:'tiktok', tagline:'15-minute dinners for people who hate cooking', bid:5, clicks:210, ts:Date.now()-3*86400000 },
+  { handle:'@planttok.leo', platform:'tiktok', tagline:'keeping houseplants alive, one mistake at a time', bid:4, clicks:167, ts:Date.now()-4*86400000 },
+  { handle:'coldpressjuiceco.com', platform:'link', tagline:'fresh pressed, delivered weekly', bid:3, clicks:98, ts:Date.now()-5*86400000 },
+  { handle:'@runwithdana', platform:'instagram', tagline:'marathon training log, follow the chaos', bid:2, clicks:64, ts:Date.now()-6*86400000 },
+];
+
 async function loadEntries(){
-  try{
-    const { data, error } = await window.sbClient
-      .from('bids')
-      .select('*')
-      .order('bid', { ascending: false })
-      .order('ts', { ascending: true });
-    if(error) throw error;
-    entries = data || [];
-  }catch(e){ entries = []; }
+  // demo mode: static example data instead of a real fetch
+  entries = EXAMPLE_ENTRIES.slice();
   entries.sort((a,b)=> b.bid - a.bid || a.ts - b.ts);
   bidAmount = entries.length === 0 ? MIN_NEW_BID : entries[0].bid + 1;
   document.getElementById('bidAmountDisplay').textContent = bidAmount;
