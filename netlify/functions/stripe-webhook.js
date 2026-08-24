@@ -22,8 +22,9 @@ exports.handler = async (event) => {
 
   if (stripeEvent.type === 'checkout.session.completed') {
     const session = stripeEvent.data.object;
-    const { handle, platform, tagline, bid } = session.metadata;
+    const { handle, platform, tagline, bid, avatarUrl } = session.metadata;
 
+    // Upsert: same handle+platform updates their existing spot instead of duplicating it
     const { error } = await supabase
       .from('bids')
       .upsert(
@@ -34,6 +35,7 @@ exports.handler = async (event) => {
           bid: Number(bid),
           clicks: 0,
           ts: Date.now(),
+          avatar_url: avatarUrl || null,
         },
         { onConflict: 'handle,platform' }
       );
