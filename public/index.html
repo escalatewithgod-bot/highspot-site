@@ -424,10 +424,6 @@
 <body>
 
 <div class="wrap">
-  <div style="background:#fff8ed;border:1px solid #f0dcae;border-radius:10px;padding:9px 13px;font-size:11.5px;color:#7a5c1e;margin:16px 0 0;line-height:1.5;">
-    Preview only — 12 example listings, no real data. This never touches your live site.
-  </div>
-
   <header class="top">
     <div class="logo">
       <img src="/logo.png" alt="HighSpot">
@@ -543,13 +539,48 @@ let selectedPlatform = 'tiktok';
 let bidAmount = MIN_BID;
 let pendingEntry = null;
 let selectedAvatarDataUrl = null; // compressed image ready to upload, or null
-const MY_BIDS_KEY = 'topspo-my-bids-demo'; // separate key so this demo never touches your real bid history
+const MY_BIDS_KEY = 'topspo-my-bids';
 
-/* ---- DEMO MODE: fake stats, no real Supabase connection ---- */
-let liveWatchingCount = 212;
+/* ---- shared Supabase client, board reads, real "watching" count via Realtime Presence ---- */
+const SUPABASE_URL = 'https://kcxjlgibpfoszzyuqbvc.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeGpsZ2licGZvc3p6eXVxYnZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1Mzg4NzgsImV4cCI6MjEwMzExNDg3OH0.2oUe_Qm9skUFXN6mLGAr-5l02nDmhxrwJkIIkiF176A';
+window.sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let liveWatchingCount = 1; // fallback while connecting
 function initPresence(){
-  document.getElementById('statsOnline').textContent = liveWatchingCount + ' online';
-  document.getElementById('statsTotal').textContent = '8,402 visitors since launch';
+  try{
+    const sb = window.sbClient;
+    const myKey = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0,12);
+    const channel = sb.channel('board-presence', { config: { presence: { key: myKey } } });
+    channel.on('presence', { event: 'sync' }, ()=>{
+      const state = channel.presenceState();
+      liveWatchingCount = Object.keys(state).length || 1;
+      document.getElementById('statsOnline').textContent = liveWatchingCount + ' online';
+    });
+    channel.subscribe(async (status)=>{
+      if(status === 'SUBSCRIBED'){ await channel.track({ online_at: Date.now() }); }
+    });
+    initVisitCounter(sb);
+  }catch(e){
+    document.getElementById('statsOnline').textContent = '— online';
+  }
+}
+
+/* ---- lifetime visitor counter ---- */
+async function initVisitCounter(sb){
+  const totalEl = document.getElementById('statsTotal');
+  try{
+    // count this as a new visit once per browser tab session, not on every reload
+    const alreadyCounted = sessionStorage.getItem('hs_visit_counted');
+    if(!alreadyCounted){
+      await sb.rpc('increment_visits');
+      sessionStorage.setItem('hs_visit_counted', '1');
+    }
+    const { data, error } = await sb.from('site_stats').select('total_visits').eq('id', 1).single();
+    if(error || !data) throw error || new Error('no data');
+    totalEl.textContent = data.total_visits.toLocaleString() + ' visitors since launch';
+  }catch(e){
+    totalEl.textContent = 'visitors since launch';
+  }
 }
 
 const BLOCKED_TERMS = ['pornhub','xvideos','xnxx','xhamster','youporn','redtube','brazzers','onlyfans','chaturbate','stripchat','spankbang','tube8','camsoda','myfreecams','livejasmin','xxx','porn','nsfw'];
@@ -582,7 +613,11 @@ function outboundUrl(entry){
 }
 
 async function trackClick(entry){
-  // demo mode: no real click tracking, just open the link
+  try{
+    if(window.sbClient){
+      await window.sbClient.rpc('increment_clicks', { p_handle: entry.handle, p_platform: entry.platform });
+    }
+  }catch(e){ /* non-fatal — still open the link either way */ }
   window.open(outboundUrl(entry), '_blank');
 }
 
@@ -737,24 +772,16 @@ function renderAll(){
   }
 }
 
-const EXAMPLE_ENTRIES = [
-  { handle:'@wavydrip', platform:'tiktok', tagline:'daily outfit drops, new vid every night — come see what dropped today', bid:34, clicks:1842, ts:Date.now()-2*60000 },
-  { handle:'@studio.north', platform:'instagram', tagline:'minimal home decor finds worth a scroll, new picks weekly', bid:27, clicks:1105, ts:Date.now()-40*60000 },
-  { handle:'shopcosmic.co', platform:'link', tagline:'20% off everything this week, code COSMIC at checkout', bid:22, clicks:894, ts:Date.now()-2*3600000 },
-  { handle:'@ramenwithred', platform:'tiktok', tagline:'best ramen spots in your city, updated every week', bid:18, clicks:731, ts:Date.now()-5*3600000 },
-  { handle:'@fitwithmara', platform:'tiktok', tagline:'free 7-day workout plan in bio, no gym needed', bid:15, clicks:602, ts:Date.now()-8*3600000 },
-  { handle:'@thriftwithjune', platform:'instagram', tagline:'thrifted fits under $20, styled 5 ways', bid:12, clicks:489, ts:Date.now()-1*86400000 },
-  { handle:'nightowlbrew.co', platform:'link', tagline:'small batch cold brew, ships nationwide', bid:9, clicks:355, ts:Date.now()-1.5*86400000 },
-  { handle:'@dogsofcamille', platform:'instagram', tagline:'one very good dog, daily updates', bid:7, clicks:298, ts:Date.now()-2*86400000 },
-  { handle:'@quickrecipes', platform:'tiktok', tagline:'15-minute dinners for people who hate cooking', bid:5, clicks:210, ts:Date.now()-3*86400000 },
-  { handle:'@planttok.leo', platform:'tiktok', tagline:'keeping houseplants alive, one mistake at a time', bid:4, clicks:167, ts:Date.now()-4*86400000 },
-  { handle:'coldpressjuiceco.com', platform:'link', tagline:'fresh pressed, delivered weekly', bid:3, clicks:98, ts:Date.now()-5*86400000 },
-  { handle:'@runwithdana', platform:'instagram', tagline:'marathon training log, follow the chaos', bid:2, clicks:64, ts:Date.now()-6*86400000 },
-];
-
 async function loadEntries(){
-  // demo mode: static example data instead of a real fetch
-  entries = EXAMPLE_ENTRIES.slice();
+  try{
+    const { data, error } = await window.sbClient
+      .from('bids')
+      .select('*')
+      .order('bid', { ascending: false })
+      .order('ts', { ascending: true });
+    if(error) throw error;
+    entries = data || [];
+  }catch(e){ entries = []; }
   entries.sort((a,b)=> b.bid - a.bid || a.ts - b.ts);
   bidAmount = entries.length === 0 ? MIN_NEW_BID : entries[0].bid + 1;
   document.getElementById('bidAmountDisplay').textContent = bidAmount;
