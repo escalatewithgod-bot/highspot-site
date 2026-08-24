@@ -24,6 +24,14 @@ exports.handler = async (event) => {
     const session = stripeEvent.data.object;
     const { handle, platform, tagline, bid, avatarUrl } = session.metadata;
 
+    // Look up any existing row so re-bidding doesn't wipe their real click count
+    const { data: existing } = await supabase
+      .from('bids')
+      .select('clicks')
+      .eq('handle', handle)
+      .eq('platform', platform)
+      .maybeSingle();
+
     // Upsert: same handle+platform updates their existing spot instead of duplicating it
     const { error } = await supabase
       .from('bids')
@@ -33,7 +41,7 @@ exports.handler = async (event) => {
           platform,
           tagline,
           bid: Number(bid),
-          clicks: 0,
+          clicks: existing ? existing.clicks : 0,
           ts: Date.now(),
           avatar_url: avatarUrl || null,
         },
