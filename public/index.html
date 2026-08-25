@@ -12,19 +12,19 @@
 <style>
   :root{
     color-scheme: dark only;
-    --bg:#0a0a0c;
+    --bg:#111114;
     --ink:#f2f2f0;
     --muted:#a8a8ac;
     --muted2:#6b6b70;
-    --line:rgba(255,255,255,0.12);
+    --line:rgba(255,255,255,0.13);
     --orange:#ff5a36;
     --orange-tint:rgba(255,90,54,0.10);
     --green:#4cae6b;
     --navy:#101d3c;
-    --glass:rgba(255,255,255,0.035);
+    --glass:rgba(255,255,255,0.045);
   }
   *{box-sizing:border-box;}
-  html{color-scheme:dark only;background:#0a0a0c;}
+  html{color-scheme:dark only;background:#111114;}
   html,body{margin:0;padding:0;touch-action:manipulation;}
   /* prevent easy text selection / copy on the page, but keep it working inside inputs */
   body{
@@ -37,9 +37,9 @@
   }
   body{
     background:
-      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.07) 0%, transparent 40%),
-      radial-gradient(circle at 85% 75%, rgba(80,130,255,0.05) 0%, transparent 45%),
-      #0a0a0c !important;
+      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.11) 0%, transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(80,130,255,0.07) 0%, transparent 50%),
+      #111114 !important;
     background-attachment:fixed;
     color:var(--ink);
     font-family:'Space Grotesk',sans-serif;
@@ -56,7 +56,7 @@
     background-size:40px 40px;
   }
   @media (prefers-color-scheme: light){
-    html, body{ background:#0a0a0c !important; color:#f2f2f0 !important; }
+    html, body{ background:#111114 !important; color:#f2f2f0 !important; }
   }
   ::selection{background:var(--orange);color:#fff;}
   .wrap{max-width:560px;margin:0 auto;padding:0 22px;position:relative;z-index:1;}
@@ -125,12 +125,20 @@
     margin-bottom:22px;
     background:var(--glass);
     backdrop-filter:blur(20px) saturate(120%);-webkit-backdrop-filter:blur(20px) saturate(120%);
-    animation:topGlow 3s ease-in-out infinite;
+    animation:fadeUp .6s cubic-bezier(0.22,1,0.36,1) forwards, topGlow 3s ease-in-out infinite .6s;
+    opacity:0;transform:translateY(10px);
+    transition:transform .12s;
     position:relative;
   }
+  .top-card:active{transform:scale(0.98);}
+  @keyframes fadeUp{
+    0%{ opacity:0; transform:translateY(22px) scale(0.92); }
+    60%{ opacity:1; transform:translateY(-3px) scale(1.015); }
+    100%{ opacity:1; transform:translateY(0) scale(1); }
+  }
   @keyframes topGlow{
-    0%,100%{ box-shadow:0 8px 30px -14px rgba(255,90,54,0.3), 0 0 0 1px rgba(255,255,255,0.02) inset; }
-    50%{ box-shadow:0 10px 40px -10px rgba(255,90,54,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset; }
+    0%,100%{ box-shadow:0 8px 28px -13px rgba(255,90,54,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset; }
+    50%{ box-shadow:0 11px 42px -9px rgba(255,90,54,0.65), 0 0 0 1px rgba(255,255,255,0.03) inset; }
   }
   .star-wrap{
     position:absolute;
@@ -164,9 +172,10 @@
     50%{ opacity:1; transform:scale(1); }
   }
   @media (prefers-reduced-motion: reduce){
-    .top-card{ animation:none; box-shadow:0 8px 24px -14px rgba(255,90,54,0.35); }
+    .top-card{ animation:none; opacity:1;transform:none; box-shadow:0 8px 24px -14px rgba(255,90,54,0.35); }
     .corner-star{ animation:none; transform:rotate(18deg); }
     .sparkle{ animation:none; opacity:0; }
+    .podium-card, .b-row{ animation:none; opacity:1; transform:none; }
   }
   .crown-row{
     display:flex;align-items:center;gap:6px;
@@ -237,7 +246,11 @@
     background:var(--glass);
     backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     cursor:pointer;
+    opacity:0;transform:translateY(10px);
+    animation:fadeUp .6s cubic-bezier(0.22,1,0.36,1) forwards;
+    transition:transform .12s, border-color .12s;
   }
+  .podium-card:active{transform:scale(0.98);border-color:rgba(255,90,54,0.4);}
   .podium-card.silver{}
   .podium-card.bronze{}
   .podium-rank{font-size:19px;font-weight:700;width:28px;flex-shrink:0;color:var(--ink);}
@@ -267,7 +280,7 @@
   }
   .modal-overlay.open{opacity:1;pointer-events:auto;}
   .modal-sheet{
-    background:#131316;width:100%;max-width:480px;border-radius:18px 18px 0 0;
+    background:#17171a;width:100%;max-width:480px;border-radius:18px 18px 0 0;
     border:1px solid var(--line);border-bottom:none;
     padding:20px 16px 24px;transform:translateY(20px);transition:transform .25s;
     max-height:88vh;overflow-y:auto;
@@ -403,7 +416,11 @@
     padding:14px 0;
     border-bottom:1px solid var(--line);
     cursor:pointer;
+    opacity:0;transform:translateY(10px);
+    animation:fadeUp .6s cubic-bezier(0.22,1,0.36,1) forwards;
+    transition:transform .12s;
   }
+  .b-row:active{transform:scale(0.98);}
   .b-row:last-child{border-bottom:none;}
   .b-rank{font-size:13px;font-weight:700;color:var(--muted2);width:20px;flex-shrink:0;font-family:'Space Mono',monospace;}
   .b-avatar{
@@ -444,7 +461,7 @@
 
   .scroll-toast{
     position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
-    background:#131316;color:var(--ink);
+    background:#17171a;color:var(--ink);
     border:1px solid var(--line);
     font-size:12.5px;font-weight:600;
     padding:11px 18px;border-radius:999px;
@@ -737,8 +754,8 @@ function renderPodium(){
   const third = entries[2];
   if(!second && !third){ holder.innerHTML = ''; return; }
 
-  const podiumRow = (entry, rank, tier, medal) => `
-    <div class="podium-card ${tier}" data-podium-rank="${rank}">
+  const podiumRow = (entry, rank, tier, medal, delay) => `
+    <div class="podium-card ${tier}" data-podium-rank="${rank}" style="animation-delay:${delay}s;">
       <div class="podium-rank">#${rank}</div>
       ${avatarHtml(entry, 'podium-avatar')}
       <div class="podium-body">
@@ -753,8 +770,8 @@ function renderPodium(){
   `;
 
   let html = '';
-  if(second) html += podiumRow(second, 2, 'silver', '🥈');
-  if(third) html += podiumRow(third, 3, 'bronze', '🥉');
+  if(second) html += podiumRow(second, 2, 'silver', '🥈', 0.08);
+  if(third) html += podiumRow(third, 3, 'bronze', '🥉', 0.16);
   holder.innerHTML = html;
 
   holder.querySelectorAll('.podium-card').forEach(card=>{
@@ -779,7 +796,7 @@ function renderBoard(){
     return;
   }
   list.innerHTML = rest.map((e, i) => `
-    <div class="b-row" data-idx="${i}">
+    <div class="b-row" data-idx="${i}" style="animation-delay:${0.24 + Math.min(i, 6) * 0.06}s;">
       <div class="b-rank">${String(i+4).padStart(2,'0')}</div>
       ${avatarHtml(e, 'b-avatar')}
       <div class="b-body">
