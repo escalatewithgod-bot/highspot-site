@@ -1,29 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" style="color-scheme: light only;">
+<html lang="en" style="color-scheme: dark only;">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="color-scheme" content="light only">
+<meta name="color-scheme" content="dark only">
 <title>Terms of Service — HighSpot</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    color-scheme: light only;
-    --bg:#fff; --ink:#111; --muted:#57503f; --line:#e8e4dc; --orange:#ff5a36;
+    color-scheme: dark only;
+    --bg:#111114; --ink:#f2f2f0; --muted:#c2c2c6; --muted2:#8d8d93; --line:rgba(255,255,255,0.14); --orange:#ff5a36;
   }
   *{box-sizing:border-box;}
-  html{color-scheme:light only;background:#fff;}
-  body{margin:0;background:#fff !important;color:var(--ink);font-family:'Inter',sans-serif;padding-bottom:60px;}
-  @media (prefers-color-scheme: dark){ html, body{ background:#fff !important; color:#111 !important; } }
-  .wrap{max-width:560px;margin:0 auto;padding:0 22px;}
+  html{color-scheme:dark only;background:#111114;}
+  body{
+    margin:0;color:var(--ink);font-family:'Space Grotesk',sans-serif;padding-bottom:60px;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.12) 0%, transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(80,130,255,0.07) 0%, transparent 50%),
+      linear-gradient(180deg, #131316 0%, #0f0f12 100%);
+    background-attachment:fixed;
+    animation:pageFadeIn .45s ease;
+  }
+  @keyframes pageFadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  body.page-leaving{ opacity:0; transition:opacity .22s ease; }
+  @media (prefers-reduced-motion: reduce){ body{ animation:none; } body.page-leaving{ transition:none; opacity:1; } }
+  @media (prefers-color-scheme: light){ html, body{ background:#111114 !important; color:#f2f2f0 !important; } }
+  .wrap{max-width:560px;margin:0 auto;padding:0 22px;position:relative;z-index:1;}
   .back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:22px 0 6px;}
-  h1{font-size:26px;font-weight:800;letter-spacing:-0.01em;margin:14px 0 4px;}
-  .updated{color:#847c6c;font-size:12px;margin:0 0 26px;font-family:'Space Mono',monospace;}
-  h2{font-size:14.5px;font-weight:800;margin:24px 0 8px;}
-  p, li{color:#3d382e;font-size:14px;line-height:1.65;margin:0 0 10px;}
+  h1{font-size:26px;font-weight:700;letter-spacing:-0.01em;margin:14px 0 4px;}
+  .updated{color:var(--muted2);font-size:12px;margin:0 0 26px;font-family:'Space Mono',monospace;}
+  h2{font-size:14.5px;font-weight:700;margin:24px 0 8px;color:var(--ink);}
+  p, li{color:var(--muted);font-size:14px;line-height:1.65;margin:0 0 10px;}
   ul{padding-left:20px;margin:0 0 10px;}
   a{color:var(--orange);}
-  .foot{text-align:center;font-size:11px;color:#9a958c;margin-top:40px;font-family:'Space Mono',monospace;}
+  .foot{text-align:center;font-size:11px;color:var(--muted2);margin-top:40px;font-family:'Space Mono',monospace;}
 </style>
 </head>
 <body>
@@ -59,5 +70,16 @@
 
   <div class="foot">HighSpot · an independent experiment</div>
 </div>
+<script>
+document.addEventListener('click', (e)=>{
+  const link = e.target.closest('a[href^="/"]');
+  if(!link) return;
+  const href = link.getAttribute('href');
+  if(!href || href.startsWith('//') || link.target === '_blank') return;
+  e.preventDefault();
+  document.body.classList.add('page-leaving');
+  setTimeout(()=>{ window.location.href = href; }, 200);
+});
+</script>
 </body>
 </html>
