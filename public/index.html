@@ -14,14 +14,14 @@
     color-scheme: dark only;
     --bg:#111114;
     --ink:#f2f2f0;
-    --muted:#a8a8ac;
-    --muted2:#6b6b70;
-    --line:rgba(255,255,255,0.13);
+    --muted:#c2c2c6;
+    --muted2:#8d8d93;
+    --line:rgba(255,255,255,0.14);
     --orange:#ff5a36;
     --orange-tint:rgba(255,90,54,0.10);
     --green:#4cae6b;
     --navy:#101d3c;
-    --glass:rgba(255,255,255,0.045);
+    --glass:rgba(255,255,255,0.06);
   }
   *{box-sizing:border-box;}
   html{color-scheme:dark only;background:#111114;}
@@ -37,15 +37,26 @@
   }
   body{
     background:
-      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.11) 0%, transparent 45%),
+      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.12) 0%, transparent 45%),
       radial-gradient(circle at 85% 75%, rgba(80,130,255,0.07) 0%, transparent 50%),
-      #111114 !important;
+      radial-gradient(circle at 90% 5%, rgba(255,196,0,0.05) 0%, transparent 35%),
+      linear-gradient(180deg, #131316 0%, #0f0f12 100%);
     background-attachment:fixed;
     color:var(--ink);
     font-family:'Space Grotesk',sans-serif;
     min-height:100vh;
     padding-bottom:60px;
     position:relative;
+    animation:pageFadeIn .45s ease;
+  }
+  @keyframes pageFadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  body.page-leaving{
+    opacity:0;
+    transition:opacity .22s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    body{ animation:none; }
+    body.page-leaving{ transition:none; opacity:1; }
   }
   body::before{
     content:"";
@@ -123,17 +134,16 @@
     border-radius:16px;
     padding:18px 18px 16px;
     margin-bottom:22px;
-    background:var(--glass);
-    backdrop-filter:blur(20px) saturate(120%);-webkit-backdrop-filter:blur(20px) saturate(120%);
-    animation:fadeUp .6s cubic-bezier(0.22,1,0.36,1) forwards, topGlow 3s ease-in-out infinite .6s;
+    background:linear-gradient(165deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 55%, rgba(255,90,54,0.05) 100%);
+    backdrop-filter:blur(20px) saturate(130%);-webkit-backdrop-filter:blur(20px) saturate(130%);
+    animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards, topGlow 3s ease-in-out infinite .6s;
     opacity:0;transform:translateY(10px);
     transition:transform .12s;
     position:relative;
   }
   .top-card:active{transform:scale(0.98);}
   @keyframes fadeUp{
-    0%{ opacity:0; transform:translateY(22px) scale(0.92); }
-    60%{ opacity:1; transform:translateY(-3px) scale(1.015); }
+    0%{ opacity:0; transform:translateY(14px) scale(0.98); }
     100%{ opacity:1; transform:translateY(0) scale(1); }
   }
   @keyframes topGlow{
@@ -243,11 +253,11 @@
     display:flex;align-items:center;gap:12px;
     border-radius:13px;padding:13px 14px;margin-bottom:10px;
     border:1px solid var(--line);
-    background:var(--glass);
+    background:linear-gradient(165deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.02) 100%);
     backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     cursor:pointer;
     opacity:0;transform:translateY(10px);
-    animation:fadeUp .6s cubic-bezier(0.22,1,0.36,1) forwards;
+    animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards;
     transition:transform .12s, border-color .12s;
   }
   .podium-card:active{transform:scale(0.98);border-color:rgba(255,90,54,0.4);}
@@ -417,7 +427,7 @@
     border-bottom:1px solid var(--line);
     cursor:pointer;
     opacity:0;transform:translateY(10px);
-    animation:fadeUp .6s cubic-bezier(0.22,1,0.36,1) forwards;
+    animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards;
     transition:transform .12s;
   }
   .b-row:active{transform:scale(0.98);}
@@ -1155,6 +1165,18 @@ function sizeMarchOutline(){
 window.addEventListener('resize', sizeMarchOutline);
 window.addEventListener('load', sizeMarchOutline);
 setTimeout(sizeMarchOutline, 50); // catch late font/layout shifts
+
+// Smooth page transitions for internal navigation (about/terms/privacy)
+// instead of an instant jump — fades the page out, then navigates.
+document.addEventListener('click', (e)=>{
+  const link = e.target.closest('a[href^="/"]');
+  if(!link) return;
+  const href = link.getAttribute('href');
+  if(!href || href.startsWith('//') || link.target === '_blank') return;
+  e.preventDefault();
+  document.body.classList.add('page-leaving');
+  setTimeout(()=>{ window.location.href = href; }, 200);
+});
 
 loadEntries();
 initPresence();
