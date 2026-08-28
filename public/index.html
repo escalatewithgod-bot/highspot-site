@@ -7,15 +7,15 @@
 <meta name="supported-color-schemes" content="dark">
 <title>HighSpot — Claim the board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
   :root{
     color-scheme: dark only;
     --bg:#111114;
     --ink:#f2f2f0;
-    --muted:#c2c2c6;
-    --muted2:#8d8d93;
+    --muted:#dcdce0;
+    --muted2:#a8a8ae;
     --line:rgba(255,255,255,0.14);
     --orange:#ff5a36;
     --orange-tint:rgba(255,90,54,0.10);
@@ -37,13 +37,13 @@
   }
   body{
     background:
-      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.12) 0%, transparent 45%),
+      radial-gradient(circle at 15% 8%, rgba(255,90,54,0.08) 0%, transparent 45%),
       radial-gradient(circle at 85% 75%, rgba(80,130,255,0.07) 0%, transparent 50%),
       radial-gradient(circle at 90% 5%, rgba(255,196,0,0.05) 0%, transparent 35%),
       linear-gradient(180deg, #131316 0%, #0f0f12 100%);
     background-attachment:fixed;
     color:var(--ink);
-    font-family:'Space Grotesk',sans-serif;
+    font-family:'Manrope',sans-serif;
     min-height:100vh;
     padding-bottom:60px;
     position:relative;
@@ -130,16 +130,19 @@
   }
 
   .top-card{
-    border:1px solid rgba(255,90,54,0.4);
+    position:relative;
     border-radius:16px;
     padding:18px 18px 16px;
     margin-bottom:22px;
-    background:linear-gradient(165deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 55%, rgba(255,90,54,0.05) 100%);
-    backdrop-filter:blur(20px) saturate(130%);-webkit-backdrop-filter:blur(20px) saturate(130%);
-    animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards, topGlow 3s ease-in-out infinite .6s;
+    background:
+      linear-gradient(135deg, rgba(255,150,95,0.24) 0%, rgba(255,90,54,0.13) 35%, rgba(170,100,235,0.22) 75%, rgba(100,150,255,0.18) 100%),
+      rgba(255,255,255,0.15);
+    backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);
+    border:1px solid rgba(255,255,255,0.32);
+    box-shadow:0 10px 34px -14px rgba(255,90,54,0.28), 0 0 40px -18px rgba(150,80,220,0.28);
+    animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards, topGlow 3s ease-in-out infinite .55s;
     opacity:0;transform:translateY(10px);
     transition:transform .12s;
-    position:relative;
   }
   .top-card:active{transform:scale(0.98);}
   @keyframes fadeUp{
@@ -147,8 +150,8 @@
     100%{ opacity:1; transform:translateY(0) scale(1); }
   }
   @keyframes topGlow{
-    0%,100%{ box-shadow:0 8px 28px -13px rgba(255,90,54,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset; }
-    50%{ box-shadow:0 11px 42px -9px rgba(255,90,54,0.65), 0 0 0 1px rgba(255,255,255,0.03) inset; }
+    0%,100%{ box-shadow:0 10px 34px -14px rgba(255,90,54,0.24), 0 0 40px -18px rgba(150,80,220,0.26); }
+    50%{ box-shadow:0 12px 40px -12px rgba(255,90,54,0.4), 0 0 50px -14px rgba(150,80,220,0.4); }
   }
   .star-wrap{
     position:absolute;
@@ -182,7 +185,7 @@
     50%{ opacity:1; transform:scale(1); }
   }
   @media (prefers-reduced-motion: reduce){
-    .top-card{ animation:none; opacity:1;transform:none; box-shadow:0 8px 24px -14px rgba(255,90,54,0.35); }
+    .top-card{ animation:none; opacity:1;transform:none; }
     .corner-star{ animation:none; transform:rotate(18deg); }
     .sparkle{ animation:none; opacity:0; }
     .podium-card, .b-row{ animation:none; opacity:1; transform:none; }
@@ -190,15 +193,15 @@
   .crown-row{
     display:flex;align-items:center;gap:6px;
     font-size:11px;font-weight:700;letter-spacing:0.06em;
-    color:var(--orange);text-transform:uppercase;
+    color:#ff8c5c;text-transform:uppercase;
     margin-bottom:14px;
   }
   .last-bid-ago{
-    color:var(--muted2);font-weight:600;letter-spacing:normal;text-transform:none;
+    color:#d8d8dc;font-weight:600;letter-spacing:normal;text-transform:none;
     font-family:'Space Mono',monospace;font-size:10.5px;
   }
   .top-card .row{display:flex;align-items:center;gap:14px;}
-  .rank-num{font-size:26px;font-weight:700;width:38px;flex-shrink:0;color:var(--ink);}
+  .rank-num{font-size:26px;font-weight:700;width:38px;flex-shrink:0;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.4);}
   .avatar{
     width:44px;height:44px;border-radius:11px;
     display:flex;align-items:center;justify-content:center;
@@ -206,12 +209,12 @@
     flex-shrink:0;
   }
   .entry-body{flex:1;min-width:0;}
-  .handle-line{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15.5px;color:var(--ink);}
-  .platform-ic{font-size:12.5px;opacity:0.75;}
-  .tagline{color:var(--muted);font-size:14px;font-weight:400;margin-top:3px;line-height:1.45;}
+  .handle-line{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15.5px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.5);}
+  .platform-ic{font-size:12.5px;opacity:0.9;}
+  .tagline{color:#f2f2f4;font-size:14px;font-weight:500;margin-top:3px;line-height:1.45;text-shadow:0 1px 4px rgba(0,0,0,0.45);}
   .bid-figs{text-align:right;flex-shrink:0;}
-  .bid-amt{font-size:16.5px;font-weight:700;color:var(--orange);}
-  .clicks{font-size:12px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
+  .bid-amt{font-size:16.5px;font-weight:700;color:#ff8c5c;text-shadow:0 1px 4px rgba(0,0,0,0.35);}
+  .clicks{font-size:12px;color:#d8d8dc;margin-top:2px;font-family:'Space Mono',monospace;}
 
   .panel-inner{ padding-top:2px; }
 
@@ -252,9 +255,12 @@
   .podium-card{
     display:flex;align-items:center;gap:12px;
     border-radius:13px;padding:13px 14px;margin-bottom:10px;
-    border:1px solid var(--line);
-    background:linear-gradient(165deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.02) 100%);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.16);
+    background:
+      linear-gradient(135deg, rgba(255,140,80,0.11) 0%, rgba(255,90,54,0.05) 40%, rgba(170,100,235,0.11) 100%),
+      rgba(255,255,255,0.08);
+    backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+    box-shadow:0 8px 24px -14px rgba(0,0,0,0.4);
     cursor:pointer;
     opacity:0;transform:translateY(10px);
     animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards;
@@ -263,19 +269,19 @@
   .podium-card:active{transform:scale(0.98);border-color:rgba(255,90,54,0.4);}
   .podium-card.silver{}
   .podium-card.bronze{}
-  .podium-rank{font-size:19px;font-weight:700;width:28px;flex-shrink:0;color:var(--ink);}
+  .podium-rank{font-size:19px;font-weight:700;width:28px;flex-shrink:0;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.4);}
   .podium-avatar{
     width:40px;height:40px;border-radius:10px;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;
     font-weight:700;font-size:15px;color:#fff;
   }
   .podium-body{flex:1;min-width:0;}
-  .podium-handle{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:6px;color:var(--ink);}
+  .podium-handle{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:6px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.4);}
   .podium-medal{font-size:14px;}
-  .podium-tagline{color:var(--muted);font-size:12.5px;font-weight:400;margin-top:3px;line-height:1.4;}
+  .podium-tagline{color:#e8e8ea;font-size:12.5px;font-weight:500;margin-top:3px;line-height:1.4;text-shadow:0 1px 3px rgba(0,0,0,0.4);}
   .podium-figs{text-align:right;flex-shrink:0;}
-  .podium-amt{font-weight:700;font-size:15px;color:var(--ink);}
-  .podium-clicks{font-size:11px;color:var(--muted2);margin-top:2px;font-family:'Space Mono',monospace;}
+  .podium-amt{font-weight:700;font-size:15px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.35);}
+  .podium-clicks{font-size:11px;color:#c4c4c8;margin-top:2px;font-family:'Space Mono',monospace;}
 
   .board-head-label{
     font-size:12.5px;color:var(--muted2);font-weight:700;text-transform:uppercase;
@@ -329,7 +335,7 @@
     padding:9px 12px;
     color:var(--ink);
     font-size:14px;
-    font-family:'Space Grotesk',sans-serif;
+    font-family:'Manrope',sans-serif;
     outline:none;
   }
   .field input::placeholder{color:var(--muted2);}
@@ -388,7 +394,7 @@
   }
   .stepper-amount .cur{color:var(--orange);font-size:14px;}
   .stepper-amount input{
-    font-family:'Space Grotesk',sans-serif;
+    font-family:'Manrope',sans-serif;
     font-size:20px;font-weight:700;color:var(--ink);
     border:none;background:transparent;outline:none;
     width:4.5ch;padding:0;text-align:left;
@@ -420,11 +426,19 @@
   .err{color:var(--orange);font-size:12.5px;margin-top:9px;text-align:center;min-height:0;font-weight:600;}
   .hint{font-size:12px;color:var(--muted2);margin-top:10px;text-align:center;}
 
-  .board-list{display:flex;flex-direction:column;}
+  .board-list{
+    background:
+      linear-gradient(135deg, rgba(255,140,80,0.05) 0%, rgba(170,100,235,0.05) 100%),
+      rgba(255,255,255,0.05);
+    backdrop-filter:blur(12px) saturate(130%);-webkit-backdrop-filter:blur(12px) saturate(130%);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:16px;
+    padding:4px 16px;
+  }
   .b-row{
     display:flex;align-items:center;gap:13px;
     padding:14px 0;
-    border-bottom:1px solid var(--line);
+    border-bottom:1px solid rgba(255,255,255,0.09);
     cursor:pointer;
     opacity:0;transform:translateY(10px);
     animation:fadeUp .55s cubic-bezier(0.16,1,0.3,1) forwards;
@@ -439,35 +453,16 @@
     font-weight:700;font-size:14.5px;color:#fff;flex-shrink:0;
   }
   .b-body{flex:1;min-width:0;}
-  .b-handle{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:5px;color:var(--ink);}
-  .b-tagline{color:var(--muted);font-size:13px;font-weight:400;margin-top:4px;line-height:1.45;}
+  .b-handle{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:5px;color:#fff;}
+  .b-tagline{color:#dcdce0;font-size:13px;font-weight:500;margin-top:4px;line-height:1.45;}
   .b-figs{display:flex;align-items:center;flex-shrink:0;}
   .b-figs-amts{display:flex;flex-direction:column;align-items:flex-end;}
-  .b-amt{font-size:15px;font-weight:700;color:var(--ink);}
+  .b-amt{font-size:15px;font-weight:700;color:#fff;}
   .b-clicks{font-size:12px;color:var(--muted2);margin-top:1px;font-family:'Space Mono',monospace;}
 
   .empty{text-align:center;color:var(--muted2);font-size:13px;padding:20px 0;}
   .loading{text-align:center;color:var(--muted2);font-size:13px;padding:30px 0;font-family:'Space Mono',monospace;}
   .footnote{text-align:center;font-size:12px;color:var(--muted2);margin-top:20px;line-height:1.6;font-family:'Space Mono',monospace;}
-
-  .comeback{
-    display:flex;align-items:center;gap:11px;
-    background:var(--navy);color:#fff;
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:12px;padding:12px 14px;
-    margin-bottom:18px;
-  }
-  .comeback-ic{font-size:18px;flex-shrink:0;}
-  .comeback-text{flex:1;font-size:12.5px;line-height:1.4;}
-  .comeback-text b{color:#ffb199;}
-  .comeback-btn{
-    flex-shrink:0;background:var(--orange);color:#0a0a0c;border:none;
-    border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;
-  }
-  .comeback-close{
-    flex-shrink:0;background:transparent;border:none;color:#8b93a8;
-    font-size:14px;cursor:pointer;padding:2px 4px;
-  }
 
   .scroll-toast{
     position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
@@ -510,8 +505,6 @@
     <h1>Claim #1 for <span class="price" id="topPriceDisplay">$—</span></h1>
     <p>Outbid them to take the top spot. Any bid still lands you a seat on the board.</p>
   </div>
-
-  <div id="comebackBanner"></div>
 
   <div id="topCardHolder"></div>
 
@@ -850,9 +843,9 @@ async function loadEntries(){
   }catch(e){ entries = []; }
   entries.sort((a,b)=> b.bid - a.bid || a.ts - b.ts);
   renderAll();
-  bidAmount = entries.length === 0 ? MIN_NEW_BID : entries[0].bid + 1;
+  // bidding always starts at $0 — the person taps + themselves if they want to go higher
+  bidAmount = MIN_NEW_BID;
   document.getElementById('bidAmountDisplay').textContent = bidAmount;
-  checkComeback();
   scheduleScrollToast();
   handleReturnFromCheckout();
 }
@@ -864,39 +857,6 @@ function rememberMyBid(handle, bid, platform){
   const record = { handle, bid, platform, ts: Date.now() };
   if(idx >= 0) mine[idx] = record; else mine.push(record);
   localStorage.setItem(MY_BIDS_KEY, JSON.stringify(mine));
-}
-
-function checkComeback(){
-  let mine = [];
-  try{ mine = JSON.parse(localStorage.getItem(MY_BIDS_KEY) || '[]'); }catch(e){ mine = []; }
-  if(!mine.length || !entries.length) return;
-
-  mine.sort((a,b)=> b.ts - a.ts);
-  const last = mine[0];
-  const topBid = entries[0].bid;
-  const stillTop = entries[0].handle.toLowerCase() === last.handle.toLowerCase();
-  if(stillTop) return;
-
-  const banner = document.getElementById('comebackBanner');
-  banner.innerHTML = `
-    <div class="comeback">
-      <div class="comeback-ic">👋</div>
-      <div class="comeback-text">Welcome back — you bid <b>$${last.bid}</b> on ${escapeHtml(last.handle)}. #1 is now $${topBid}. Bid again to get back on top.</div>
-      <button class="comeback-btn" id="comebackBtn">Bid again</button>
-      <button class="comeback-close" id="comebackClose">✕</button>
-    </div>
-  `;
-  document.getElementById('comebackBtn').addEventListener('click', ()=>{
-    document.getElementById('handleInput').value = last.handle;
-    document.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('active'));
-    const tab = document.querySelector(`.p-tab[data-platform="${last.platform}"]`);
-    if(tab) tab.classList.add('active');
-    selectedPlatform = last.platform;
-    bidAmount = Math.max(topBid + 1, minAllowed());
-    document.getElementById('bidAmountDisplay').textContent = bidAmount;
-    document.getElementById('addModalOverlay').classList.add('open');
-  });
-  document.getElementById('comebackClose').addEventListener('click', ()=>{ banner.innerHTML = ''; });
 }
 
 function handleReturnFromCheckout(){
