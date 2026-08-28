@@ -94,8 +94,10 @@
     line-height:1;
   }
 
+  /* ---- visitor pill: single stat, subtle diagonal shine sweeping across it ---- */
   .stats-pill-wrap{display:flex;justify-content:center;margin-bottom:18px;}
   .stats-pill{
+    position:relative;
     display:inline-flex;align-items:center;gap:7px;
     background:var(--glass);
     backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -107,16 +109,30 @@
     max-width:100%;
     overflow:hidden;text-overflow:ellipsis;
   }
-  .stats-online{color:var(--green);font-weight:700;}
-  .stats-sep{color:var(--muted2);}
-  .stats-total{color:var(--muted);}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);position:relative;flex-shrink:0;}
-  .dot::after{
-    content:"";position:absolute;inset:-4px;border-radius:50%;
-    border:1.5px solid var(--green);opacity:.5;
-    animation:pulse 2s infinite;
+  .stats-total{color:var(--muted);position:relative;z-index:1;}
+  .stats-pill::before{
+    content:"";
+    position:absolute;
+    top:0; left:-60%;
+    width:45%; height:100%;
+    background:linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255,0.10) 45%,
+      rgba(255,255,255,0.18) 50%,
+      rgba(255,255,255,0.10) 55%,
+      transparent 100%);
+    transform:skewX(-20deg);
+    animation:pillShine 3.4s ease-in-out infinite;
+    pointer-events:none;
   }
-  @keyframes pulse{0%{transform:scale(.6);opacity:.7;}70%{transform:scale(1.6);opacity:0;}100%{opacity:0;}}
+  @keyframes pillShine{
+    0%{ left:-60%; }
+    40%{ left:120%; }
+    100%{ left:120%; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stats-pill::before{ animation:none; opacity:0; }
+  }
 
   .hero h1{
     font-size:34px;font-weight:700;letter-spacing:-0.02em;
@@ -494,9 +510,6 @@
 
   <div class="stats-pill-wrap">
     <div class="stats-pill">
-      <span class="dot"></span>
-      <span class="stats-online" id="statsOnline">— online</span>
-      <span class="stats-sep">·</span>
       <span class="stats-total" id="statsTotal">— visitors since launch</span>
     </div>
   </div>
@@ -604,7 +617,7 @@ const MY_BIDS_KEY = 'topspo-my-bids';
 const SUPABASE_URL = 'https://kcxjlgibpfoszzyuqbvc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjeGpsZ2licGZvc3p6eXVxYnZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1Mzg4NzgsImV4cCI6MjEwMzExNDg3OH0.2oUe_Qm9skUFXN6mLGAr-5l02nDmhxrwJkIIkiF176A';
 window.sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let liveWatchingCount = 1; // fallback while connecting
+let liveWatchingCount = 1; // kept for potential future use; no longer displayed
 function initPresence(){
   try{
     const sb = window.sbClient;
@@ -613,14 +626,13 @@ function initPresence(){
     channel.on('presence', { event: 'sync' }, ()=>{
       const state = channel.presenceState();
       liveWatchingCount = Object.keys(state).length || 1;
-      document.getElementById('statsOnline').textContent = liveWatchingCount + ' online';
     });
     channel.subscribe(async (status)=>{
       if(status === 'SUBSCRIBED'){ await channel.track({ online_at: Date.now() }); }
     });
     initVisitCounter(sb);
   }catch(e){
-    document.getElementById('statsOnline').textContent = '— online';
+    /* presence is non-critical; visitor total still loads independently */
   }
 }
 
@@ -825,10 +837,6 @@ function renderAll(){
   renderTopCard();
   renderPodium();
   renderBoard();
-  const onlineEl = document.getElementById('statsOnline');
-  if(onlineEl && onlineEl.textContent === '— online'){
-    onlineEl.textContent = liveWatchingCount + ' online';
-  }
 }
 
 async function loadEntries(){
