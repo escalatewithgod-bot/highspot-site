@@ -122,12 +122,13 @@
       rgba(255,255,255,0.10) 55%,
       transparent 100%);
     transform:skewX(-20deg);
-    animation:pillShine 3.4s ease-in-out infinite;
+    animation:pillShine 12s ease-in-out infinite;
+    animation-delay:3s;
     pointer-events:none;
   }
   @keyframes pillShine{
     0%{ left:-60%; }
-    40%{ left:120%; }
+    15%{ left:120%; }
     100%{ left:120%; }
   }
   @media (prefers-reduced-motion: reduce){
@@ -516,7 +517,7 @@
 
   <div class="hero">
     <h1>Claim #1 for <span class="price" id="topPriceDisplay">$—</span></h1>
-    <p>Outbid them to take the top spot. Any bid still lands you a seat on the board.</p>
+    <p>Outbid them to take the high spot. Any bid still lands you a seat on the board.</p>
   </div>
 
   <div id="topCardHolder"></div>
